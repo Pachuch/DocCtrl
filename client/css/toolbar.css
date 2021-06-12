@@ -1,0 +1,13 @@
+.toolbar {
+    max-width: 1280px;
+    margin: auto;
+}
+
+.toolbar_inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 0.5em;
+}
+

@@ -1,0 +1,25 @@
+.account_details_inner,
+.contact_details_inner,
+.account_info_inner {
+    padding: 5mm;
+}
+
+.account_details_label,
+.contact_details_label,
+.account_info_label {
+    width: 150px;
+}
+
+.account_details_text_input,
+.contact_details_text_input,
+.account_info_value {
+    width: 30%;
+    /* padding: 0.8em; */
+}
+
+.account_details_field,
+.contact_details_field {
+    display: flex;
+    justify-content: left;
+    padding-top: 3mm;
+}

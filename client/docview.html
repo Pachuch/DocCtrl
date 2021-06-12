@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocCtrl - View</title>
+
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet"> -->
+    
+    <link rel="stylesheet" type="text/css" href="css/footer.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sidebar.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="css/toolbar.css">
+    <link rel="stylesheet" type="text/css" href="css/assignment.css"/>
+    <link rel="stylesheet" type="text/css" href="css/resolution.css"/>
+    <link rel="stylesheet" type="text/css" href="css/report.css"/>
+    <link rel="stylesheet" type="text/css" href="css/res-tree.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="header_inner">
+                <div class="header_info">
+                    <a href="index.html" class="header_logo"><img src="res/images/main/rainbow.png" alt="Logo" width="80%" height="auto"></a>
+                    <a href="#">Сайт УГЛТУ</a>
+                </div>
+                <!-- <div class="header_extern">
+                    Links
+                </div> -->
+                <nav class="header_nav">
+                    <form action="#" class="header_search_box">
+                        <!-- <label for="search_input">Search</label> -->
+                        <input type="text" id="search_input" name="search_input">
+                        <input type="submit" value="Поиск">
+                    </form>
+                    <div class="header_username">
+                        Иванов И. И ▼
+                    </div>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <div class="container">
+            <div class="toolbar_inner">
+                <div class="toolbar_edit">
+                    <button class="toolbar_button">В работу</button>
+                    <button class="toolbar_button">Изменить</button>
+                </div>
+                <div class="toolbar_new_decision">
+                    <button class="toolbar_button">Создать резолюцию</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="everything">
+
+        <div id="left_sidebar">
+            <nav role="navigation" class="sidebar_navigation">
+                <ol class="left_sidebar_list">
+                    <li class="sidebar_caption"><img src="res/images/main/home.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto">Главная</li>
+                    <li class="sidebar_caption"><img src="res/images/main/tasks.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto">Задание</li>
+                    <li class="sidebar_item">▼ № МП-46010 от 19.03.21 ОАО Завод</li>
+                    <li class="sidebar_item">▼ Источник: с20</li>
+                    <li class="sidebar_item">▼ Категория: управление</li>
+                    <li class="sidebar_caption"><img src="res/images/main/delivery-time.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto">Срок</li>
+                    <li class="sidebar_item">▼ 16.04.21 - Осталось 14 дней. На рассмотрении</li>
+                    <li class="sidebar_caption"><img src="res/images/main/file.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto">Файлы</li>
+                    <li class="sidebar_item">▼ О внесении изменений в приказ.docx</li>
+                    <li class="sidebar_item">▼ №8342-43-5 17.04.21.docx</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div id="content">
+
+            <div class="assignment">
+                <div class="container">
+                    <div class="assignment_inner">
+                        <p>▼ Поручение</p>
+                        <!-- <br>
+                        <p>Пункт 1. 20.03.2020. (Петров А. А, Павлов И. Е, Доромей В. Р)</p><br>
+                        <p>В связи с невозможностью прохождения обучения с помощью дистанционных образовательных технологий<br><br>
+                            Приказываю:<br><br>
+                            1. Перевести обучающихся, не имеющих доступа к информационным ресурсам на обучение по индивидуальному
+                            плану;<br>
+                            2. Руководителям отелений филиала (Посеуковой Н.В, Ванкеевой Ю.С) сформировать списки обучающихся, не
+                            имеющих доступа к информационным ресурсам для обучения, дистанционно, и представить их заместителю
+                            директора по учебной работе в срок до 15.04.2020г.;<br>
+                            3. Звыедующим учебной частью отделений филиала (Коневой Е.П, Искановой Н.Б, Истоминой Д.А) разработать
+                            индивидуальные планы обучения по каждому обучающемуся, не имеющему доступа, при наличии таковых в
+                            срок до 16.04.2020г.;<br>
+                            4. Контроль за исполнением возложить на заместителя директора по учебной работе Жалсараеву Е.А.</p><br>
+                        <p>Утверждено: нет</p> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="resolution">
+                <div class="container">
+                    <div class="resolution_inner">
+                        <p>▼ Резолюция</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report">
+                <div class="container">
+                    <div class="report_inner">
+                        <p>▼ Отчеты</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="res-tree">
+                <div class="container">
+                    <div class="res-tree_inner">
+                        <p>▼ Дерево резолюций</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="container">
+            <div class="footer_inner">
+                <div class="footer_logo">
+                    <a href="index.html"><img src="res/images/main/logo.png" alt="Logo" width="100%" height="auto"></a>
+                </div>
+                <div class="footer_nav">
+                    <!-- Footer section -->
+                </div>
+                <div class="footer_copyright">
+                    <ul class="footer_extern">
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Blog</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">VK</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Facebook</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Reddit</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Youtube</a></li>
+                    </ul>
+                    <ul class="footer_about">
+                        <p class="footer_about_elem">Copyright</p>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="js/docview.js"></script>
+</html>

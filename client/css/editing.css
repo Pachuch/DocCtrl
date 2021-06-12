@@ -1,0 +1,100 @@
+.general_inner,
+.clauses_inner,
+.files_inner,
+.owners_inner {
+    padding: 5mm;
+}
+
+.general_label {
+    width: 150px;
+}
+
+.general_text_input {
+    width: 30%;
+    /* padding: 0.8em; */
+}
+
+.general_field {
+    display: flex;
+    justify-content: left;
+    padding-top: 3mm;
+}
+
+.area_input {
+    /* height: 10em; */
+    width: 85%
+}
+
+.clauses_control,
+.files_control,
+.owners_control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 0.5em;
+    background: rgb(220, 220, 220);
+    border-radius: 5px;
+}
+
+.popup_addowner {
+    display: none;
+}
+
+.popup_addowner {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: black;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+.popup_addowner_inner {
+    background-color: #fefefe;
+    margin: auto;
+    border: 2px solid rgb(143, 201, 255);
+    border-radius: 5px;
+    width: 450px;
+}
+
+.popup_addowner_wrapper {
+    margin: 5px;
+    padding: 15px;
+    color: black;
+  }
+
+.popup_btn_close {
+    color: #aaaaaa;
+    float: right;
+    padding-right: 15px;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.popup_btn_close:hover,
+.popup_btn_close:focus {
+    color: rgb(143, 201, 255);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.popup_search_input {
+    padding: 0.8em;
+    /* margin-bottom: 15px; */
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    background: #f1f1f1;
+
+    width: 95%;
+}
+
+.query_row:hover {
+    color: blue;
+    cursor: pointer;
+}

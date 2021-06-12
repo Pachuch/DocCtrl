@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="55">
+
+    <title>DocCtrl - Настройки профиля</title>
+
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet"> -->
+    
+    <link rel="stylesheet" type="text/css" href="css/footer.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sidebar.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="css/toolbar.css">
+    <link rel="stylesheet" type="text/css" href="css/account.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header_inner">
+                <div class="header_info">
+                    <a href="index.html" class="header_logo"><img src="res/images/main/rainbow.png" alt="Logo" width="80%" height="auto"></a>
+                    <a href="#">Сайт УГЛТУ</a>
+                </div>
+                <!-- <div class="header_extern">
+                    Links
+                </div> -->
+                <nav class="header_nav">
+                    <form action="#" class="header_search_box">
+                        <!-- <label for="search_input">Search</label> -->
+                        <input type="text" id="search_input" name="search_input">
+                        <input type="submit" value="Поиск">
+                    </form>
+                    
+                    <div class="header_auth">
+                        <a href="#" class="header_login">Войти</a>
+                        <a href="#" class="header_signup">Регистрация</a>
+                    </div>
+
+                    <div class="header_user" style="display: none;">
+                        <a href="#" class="header_user_username">▼ Иванов И. И</a>
+                        <a href="#" class="header_user_logout"> - Выйти</a>
+                    </div>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <div class="container">
+            <div class="toolbar_inner">
+                <div class="toolbar_new_decision">
+                    <button class="toolbar_button">?</button>
+                </div>
+                <div class="toolbar_edit">
+                    <button class="toolbar_button">Завершить редактирование</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="everything">
+
+        <div id="left_sidebar">
+            <nav role="navigation" class="sidebar_navigation">
+                <ol class="left_sidebar_list">
+                    <li class="sidebar_caption"><img src="res/images/main/home.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto"><a href="index.html">Главная</a></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div id="content">
+
+            <section id="settings_section">
+
+                <div class="account_details">
+                    <div class="container">
+                        <div class="account_details_inner">
+                            <p>▼ Настройки аккаунта</p>
+                            <br>
+                            <form method='POST' action="/updateUser" class="account_details_wrapper">
+                                <div class="account_details_field">
+                                    <label for="username" class="account_details_label">Имя пользователя</label>
+                                    <input type="text" id="username" class="account_details_text_input" placeholder="Введите имя пользователя" name="username" required>
+                                </div>
+
+                                <div class="account_details_field">
+                                    <label for="email" class="account_details_label">Email</label>
+                                    <input type="text" id="email" class="account_details_text_input" placeholder="Введите e-mail" name="email">
+                                </div>
+
+                                <div class="account_details_field">
+                                    <label for="password" class="account_details_label">Пароль</label>
+                                    <input type="password" id="password" class="account_details_text_input" placeholder="Введите пароль" name="password">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="contact_details">
+                    <div class="container">
+                        <div class="contact_details_inner">
+                            <p>▼ Контактные данные</p>
+                            <br>
+                            <form method='POST' action="/updateUser" class="contact_details_wrapper">
+                                <div class="contact_details_field">
+                                    <label for="fullname" class="contact_details_label">ФИО</label>
+                                    <input type="text" id="fullname" class="contact_details_text_input" placeholder="Введите фамилию, имя и отчество" name="fullname" required>
+                                </div>
+
+                                <div class="contact_details_field">
+                                    <label for="position" class="contact_details_label">Должность</label>
+                                    <input type="text" id="position" class="contact_details_text_input" placeholder="Введите должность" name="position" required>
+                                </div>
+
+                                <div class="contact_details_field">
+                                    <label for="phone" class="contact_details_label">Номер тел.</label>
+                                    <input type="text" id="phone" class="contact_details_text_input" placeholder="Введите номер тел." name="phone" required>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="account_info">
+                    <div class="container">
+                        <div class="account_info_inner">
+                            <p>▼ Дополнительная информация</p>
+                            <br>
+                            <div class="account_details_field">
+                                <div class="account_info_label">
+                                    Дата регистрации
+                                </div>
+                                <div class="account_info_value">
+                                    30.04.2021 12:34:12
+                                </div>  
+                            </div>
+                            <div class="account_details_field">
+                                <div class="account_info_label">
+                                    Уровень доступа
+                                </div>
+                                <div class="account_info_value">
+                                    Пользователь
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="container">
+            <div class="footer_inner">
+                <div class="footer_logo">
+                    <a href="index.html"><img src="res/images/main/logo.png" alt="Logo" width="100%" height="auto"></a>
+                </div>
+                <div class="footer_nav">
+                    <!-- Footer section -->
+                </div>
+                <div class="footer_copyright">
+                    <ul class="footer_extern">
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Blog</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">VK</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Facebook</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Reddit</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Youtube</a></li>
+                    </ul>
+                    <ul class="footer_about">
+                        <p class="footer_about_elem">Copyright</p>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/index.js"></script>
+</html>

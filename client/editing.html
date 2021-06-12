@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="refresh" content="55"> -->
+
+    <title>DocCtrl - Настройки профиля</title>
+
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet"> -->
+    
+    <link rel="stylesheet" type="text/css" href="css/footer.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sidebar.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="css/toolbar.css">
+    <link rel="stylesheet" type="text/css" href="css/editing.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header_inner">
+                <div class="header_info">
+                    <a href="index.html" class="header_logo"><img src="res/images/main/rainbow.png" alt="Logo" width="80%" height="auto"></a>
+                    <a href="#">Сайт УГЛТУ</a>
+                </div>
+                <!-- <div class="header_extern">
+                    Links
+                </div> -->
+                <nav class="header_nav">
+                    <form action="#" class="header_search_box">
+                        <!-- <label for="search_input">Search</label> -->
+                        <input type="text" id="search_input" name="search_input">
+                        <input type="submit" value="Поиск">
+                    </form>
+                    
+                    <div class="header_auth">
+                        <a href="#" class="header_login">Войти</a>
+                        <a href="#" class="header_signup">Регистрация</a>
+                    </div>
+
+                    <div class="header_user" style="display: none;">
+                        <a href="#" class="header_user_username">▼ Иванов И. И</a>
+                        <a href="#" class="header_user_logout"> - Выйти</a>
+                    </div>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <div class="container">
+            <div class="toolbar_inner">
+                <div class="toolbar_new_decision">
+                    <button class="toolbar_button">?</button>
+                </div>
+                <div class="toolbar_edit">
+                    <form method='POST' id="updateDocument">
+                        <button class="toolbar_button" formaction="/updateDocument">Готово</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="everything">
+
+        <div id="left_sidebar">
+            <nav role="navigation" class="sidebar_navigation">
+                <ol class="left_sidebar_list">
+                    <li class="sidebar_caption"><img src="res/images/main/home.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto"><a href="index.html">Главная</a></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div id="content">
+
+            <section id="editing_section">
+
+                <div class="general">
+                    <div class="container">
+                        <div class="general_inner">
+                            <p>▼ Заголовок и содержание</p>
+                            <br>
+                            <form method='POST' action="/updateDocumentDraft" id="updateDocument" class="general_wrapper">
+                                <div class="general_field">
+                                    <label for="number" class="general_label">Номер документа</label>
+                                    <input type="text" id="number" class="general_text_input" placeholder="Введите номер документа" name="number" required>
+                                </div>
+                                <div class="general_field">
+                                    <label for="date" class="general_label">Дата</label>
+                                    <input type="text" id="date" class="general_text_input" placeholder="Введите дату" name="date" required>
+                                </div>
+                                <div class="general_field">
+                                    <label for="accessStamp" class="general_label">Гриф ограничения</label>
+                                    <input type="text" id="accessStamp" class="general_text_input" placeholder="Введите ограничения" name="accessStamp" required>
+                                </div>
+                                <br><hr>
+                                <div class="general_field">
+                                    <label for="head" class="general_label">Заголовок</label>
+                                    <!-- <input type="text" id="head" class="general_text_input" placeholder="Введите номер документа" name="head" required> -->
+                                    <textarea form="updateDocument" name="head" id="head" class="general_text_input area_input" rows="2" wrap="soft" placeholder="Введите заголовок" required></textarea>
+                                </div>
+                                <div class="general_field">
+                                    <label for="basis" class="general_label">Основание</label>
+                                    <textarea form="updateDocument" name="basis" id="basis" class="general_text_input area_input" rows="5" wrap="soft" placeholder="Введите основание издания приказа" required></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clauses">
+                    <div class="container">
+                        <div class="clauses_inner">
+                            <p>▼ Пункты</p>
+                            <br>
+                            <div class="clauses_wrapper">
+                                <div class="clauses_control">
+                                    <div class="clauses_selection">
+                                        <!-- <button class="toolbar_button">Все приказы</button>
+                                        <button class="toolbar_button">Мои приказы</button> -->
+                                    </div>
+                                    <div class="clauses_edit">
+                                        <button id="createClauseBtn">Создать пункт</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <table>
+                                <thead>
+                                    <th style="width: 10%">№</th>
+                                    <th style="width: 60%">Заголовок</th>
+                                    <th style="width: 10%">Осталось</th>
+                                    <th style="width: 20%">Дата изменения</th>
+                                </thead>
+                                <tbody id="clausesListAll">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="files">
+                    <div class="container">
+                        <div class="files_inner">
+                            <p>▼ Файлы</p>
+                            <br>
+                            <div class="files_wrapper">
+                                <div class="files_control">
+                                    <div class="files_selection">
+                                        <!-- <button class="toolbar_button">Все приказы</button>
+                                        <button class="toolbar_button">Мои приказы</button> -->
+                                    </div>
+                                    <div class="files_edit">
+                                        <button id="addFileBtn">Добавить файл</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <table>
+                                <thead>
+                                    <th style="width: 10%">Автор</th>
+                                    <th style="width: 70%">Заголовок</th>
+                                    <th style="width: 20%">Дата загрузки</th>
+                                </thead>
+                                <tbody id="filesListAll">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="owners">
+                    <div class="container">
+                        <div class="owners_inner">
+                            <p>▼ Владельцы</p>
+                            <br>
+                            <div class="owners_wrapper">
+                                <div class="owners_control">
+                                    <div class="owners_selection">
+                                        <!-- <button class="toolbar_button">Все приказы</button>
+                                        <button class="toolbar_button">Мои приказы</button> -->
+                                    </div>
+                                    <div class="owners_edit">
+                                        <button id="addOwnerBtn">Добавить владельца</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="ownersList">
+                                <thead>
+                                    <th style="width: 45%">ФИО</th>
+                                    <th style="width: 55%">Должность</th>
+                                    <!-- <th style="width: 20%">Дата изменения</th> -->
+                                </thead>
+                                <tbody id="ownerListsAll">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+    </div>
+
+    <div id="mAddOwnerPopup" class="popup_addowner">
+        <div class="popup_addowner_inner">
+            <span class="popup_btn_close" title="Close">&times;</span>
+            <div class="popup_addowner_wrapper">
+                <form class="signup_popup_wrapper" action="/searchUser">
+                    <input type="text" id="popupSearchInput" class="popup_search_input" placeholder="Поиск пользователей" name="popupSearchInput">
+                </form>
+                <table id="popupOwnersList">
+                    <thead>
+                        <th style="width: 60%">ФИО</th>
+                        <th style="width: 40%">Имя пользователя</th>
+                    </thead>
+                    <tbody id="owners_list_choose">
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="container">
+            <div class="footer_inner">
+                <div class="footer_logo">
+                    <a href="index.html"><img src="res/images/main/logo.png" alt="Logo" width="100%" height="auto"></a>
+                </div>
+                <div class="footer_nav">
+                    <!-- Footer section -->
+                </div>
+                <div class="footer_copyright">
+                    <ul class="footer_extern">
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Blog</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">VK</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Facebook</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Reddit</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Youtube</a></li>
+                    </ul>
+                    <ul class="footer_about">
+                        <p class="footer_about_elem">Copyright</p>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/editing.js"></script>
+</html>

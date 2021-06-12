@@ -1,0 +1,13 @@
+.doclist_inner {
+    padding: 5mm;
+}
+
+.doclist_control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 0.5em;
+    background: rgb(220, 220, 220);
+    border-radius: 5px;
+}

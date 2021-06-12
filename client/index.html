@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="refresh" content="59"> -->
+
+    <title>DocCtrl - Welcome</title>
+
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet"> -->
+    
+    <link rel="stylesheet" type="text/css" href="css/footer.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sidebar.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="css/toolbar.css">
+    <link rel="stylesheet" type="text/css" href="css/assignment.css"/>
+    <link rel="stylesheet" type="text/css" href="css/analysis.css">
+    <link rel="stylesheet" type="text/css" href="css/doclist.css">
+    <link rel="stylesheet" type="text/css" href="css/auth_popup.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header_inner">
+                <div class="header_info">
+                    <a href="index.html" class="header_logo"><img src="res/images/main/rainbow.png" alt="Logo" width="80%" height="auto"></a>
+                    <a href="account.html">Сайт УГЛТУ</a>
+                </div>
+                <!-- <div class="header_extern">
+                    Links
+                </div> -->
+                <nav class="header_nav">
+                    <form action="#" class="header_search_box">
+                        <!-- <label for="search_input">Search</label> -->
+                        <input type="text" id="search_input" name="search_input">
+                        <input type="submit" value="Поиск">
+                    </form>
+                    
+                    <div class="header_auth">
+                        <a href="#" class="header_login">Войти</a>
+                        <a href="#" class="header_signup">Регистрация</a>
+                    </div>
+
+                    <div class="header_user" style="display: none;">
+                        <a href="#" class="header_user_username">▼ Иванов И. И</a>
+                        <a href="#" class="header_user_logout"> - Выйти</a>
+                    </div>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <div class="container">
+            <div class="toolbar_inner">
+                <div class="toolbar_edit" style="display: none;">
+                    <button class="toolbar_button">В работу</button>
+                    <button class="toolbar_button">Изменить</button>
+                </div>
+                <div class="toolbar_new_decision">
+                    <button class="toolbar_button">?</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- sign in popup -->
+    <div id="mLoginPopup" class="login_popup">
+        <div class="login_popup_inner">
+            <span class="login_btn_close" title="Close">&times;</span>
+            <form class="login_popup_wrapper" action="#">
+                <h1>Вход</h1>
+                <hr>
+                <div class="login_username" style="display: block;">
+                    <label for="loginUsername" class="login_label"><b>Имя пользователя</b><br></label>
+                    <input type="text" id="loginUsername" class="login_text_input" placeholder="Введите имя пользователя" name="loginUsername" required>
+                </div>
+
+                <div class="login_password">
+                    <label for="loginPassword" class="login_label"><b>Пароль</b><br></label>
+                    <input type="password" id="loginPassword" class="login_text_input" placeholder="Введите пароль" name="loginPassword">
+                </div>
+
+                <label>
+                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Запомнить
+                </label>
+                <div class="login_btn_confirmation">
+                    <button type="button" class="login_btn_cancel">Отмена</button>
+                    <button type="submit" id="loginBtn" class="login_btn_submit">Войти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+     <!-- sign up popup -->
+    <div id="mSignUpPopup" class="signup_popup">
+        <div class="signup_popup_inner">
+            <span class="signup_btn_close" title="Close">&times;</span>
+            <form class="signup_popup_wrapper" action="#">
+                <h1>Регистрация</h1>
+                <p>Зарегистрируйтесь в системе, чтобы отслеживать ваши действующие приказы</p>
+                <hr>
+
+                <div class="signup_username" style="display: block;">
+                    <label for="signupUsername" class="signup_label"><b>Имя пользователя</b><br></label>
+                    <input type="text" id="signupUsername" class="signup_text_input" placeholder="Введите имя пользователя" name="signupUsername" required>
+                </div>
+
+                <div class="signup_email">
+                    <label for="signupEmail" class="signup_label"><b>Email</b><br></label>
+                    <input type="text" id="signupEmail" class="signup_text_input" placeholder="Введите e- mail" name="signupEmail">
+                </div>
+
+                <div class="signupPassword">
+                    <label for="passsignupPasswordword" class="signup_label"><b>Пароль</b><br></label>
+                    <input type="password" id="signupPassword" class="signup_text_input" placeholder="Введите пароль" name="signupPassword">
+                </div>
+                <hr>
+                <div class="signup_full_name" style="display: block;">
+                    <label for="signupFullname" class="signup_label"><b>ФИО</b><br></label>
+                    <input type="text" id="signupFullname" class="signup_text_input" placeholder="Введите фамилию, имя и отчество" name="signupFullname" required>
+                </div>
+
+                <div class="signup_position">
+                    <label for="signupPosition" class="signup_label"><b>Должность</b><br></label>
+                    <input type="text" id="signupPosition" class="signup_text_input" placeholder="Введите должность" name="signupPosition" required>
+                </div>
+
+                <div class="signup_phone">
+                    <label for="signupPhone" class="signup_label"><b>Номер тел.</b><br></label>
+                    <input type="text" id="signupPhone" class="signup_text_input" placeholder="Введите номер тел." name="signupPhone" required>
+                </div>
+
+                <!-- <label>
+                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Подписаться на новости
+                </label> -->
+                <p style="margin-bottom: 15px;">Отправляя заявку вы соглашаетесь на <a href="#" style="color:dodgerblue">обработку персональных данных</a>.</p>
+                <div class="signup_btn_confirmation">
+                    <button type="button" class="signup_btn_cancel">Отмена</button>
+                    <button type="submit" id="registerBtn" class="signup_btn_submit">Регистрация</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- user edit popup -->
+
+    <!-- <div id="mUserEditPopup" class="signup_popup">
+        <div class="signup_popup_inner">
+            <span class="signup_btn_close" title="Close">&times;</span>
+            <form class="signup_popup_wrapper" action="#">
+                <h1>Редактирование профиля</h1>
+                <hr>
+
+                <div class="signup_username" style="display: block;">
+                    <label for="username" class="signup_label"><b>Имя пользователя</b><br></label>
+                    <input type="text" id="username" class="signup_text_input" placeholder="Введите имя пользователя" name="username" required>
+                </div>
+
+                <div class="signup_email">
+                    <label for="email" class="signup_label"><b>Email</b><br></label>
+                    <input type="text" id="email" class="signup_text_input" placeholder="Введите e- mail" name="email">
+                </div>
+
+                <div class="signup_password">
+                    <label for="password" class="signup_label"><b>Пароль</b><br></label>
+                    <input type="password" id="password" class="signup_text_input" placeholder="Введите пароль" name="password">
+                </div>
+                <hr>
+                <div class="signup_full_name" style="display: block;">
+                    <label for="fullname" class="signup_label"><b>ФИО</b><br></label>
+                    <input type="text" id="fullname" class="signup_text_input" placeholder="Введите фамилию, имя и отчество" name="fullname" required>
+                </div>
+
+                <div class="signup_position">
+                    <label for="position" class="signup_label"><b>Должность</b><br></label>
+                    <input type="text" id="position" class="signup_text_input" placeholder="Введите должность" name="position" required>
+                </div>
+
+                <div class="signup_phone">
+                    <label for="phone" class="signup_label"><b>Номер тел.</b><br></label>
+                    <input type="text" id="phone" class="signup_text_input" placeholder="Введите номер тел." name="phone" required>
+                </div>
+
+                <label>
+                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Подписаться на новости
+                </label>
+                <p style="margin-bottom: 15px;">Отправляя заявку вы соглашаетесь на <a href="#" style="color:dodgerblue">обработку персональных данных</a>.</p>
+                <div class="signup_btn_confirmation">
+                    <button type="button" class="signup_btn_cancel">Отмена</button>
+                    <button type="submit" id="submitBtn" class="signup_btn_submit">Готово</button>
+                </div>
+            </form>
+        </div>
+    </div> -->
+
+    <div id="everything">
+
+        <div id="left_sidebar">
+            <nav role="navigation" class="sidebar_navigation">
+                <ol class="left_sidebar_list">
+                    <li class="sidebar_caption"><img src="res/images/main/home.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto">Главная</li>
+                    <li class="sidebar_caption"><img src="res/images/main/tasks.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto">Управление</li>
+                    <li class="sidebar_caption"><img src="res/images/main/delivery-time.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto">Отчеты</li>
+                    <li class="sidebar_caption"><img src="res/images/main/file.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto">Настройки</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div id="content">
+
+            <section id="main_section">
+
+                <div class="analysis">
+                    <div class="container">
+                        <div class="analysis_inner">
+                            <p>▼ Анализ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mytasks">
+                    <div class="container">
+                        <div class="mytasks_inner">
+                            <p>▼ Мои задания</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="doclist">
+                    <div class="container">
+                        <div class="doclist_inner">
+                            <p>▼ Все приказы</p>
+                            <br>
+                            <div class="doclist_wrapper">
+
+                                <div class="doclist_control">
+                                    <div class="doclist_selection">
+                                        <button class="toolbar_button">Все приказы</button>
+                                        <button class="toolbar_button">Мои приказы</button>
+                                    </div>
+                                    <div class="doclist_edit">
+                                        <form>
+                                            <button class="toolbar_button" formaction="editing.html">Создать</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                                <table>
+                                    <thead>
+                                        <th style="width: 15%">Автор</th>
+                                        <th style="width: 60%">Заголовок</th>
+                                        <th style="width: 10%">Осталось</th>
+                                        <th style="width: 20%">Дата изменения</th>
+                                    </thead>
+                                    <tbody id="doclist_all">
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section hidden id="control_section">
+                    
+                    <div class="users">
+                        <div class="container">
+                            <div class="users_inner">
+                                <p>▼ Пользователи</p>
+                                <br>
+
+                                <div class="doclist_control">
+                                    <div class="doclist_selection">
+                                        <button class="toolbar_button">Все пользователи</button>
+                                        <button class="toolbar_button">Удаленные</button>
+                                    </div>
+                                    <div class="doclist_edit">
+                                        <button class="toolbar_button">Создать</button>
+                                    </div>
+                                </div>
+
+                                <table id="control_users">
+                                    <thead>
+                                        <th>ID</th>
+                                        <th>Имя пользователя</th>
+                                        <th>Почта</th>
+                                        <th>Пароль</th>
+                                        <th>ФИО</th>
+                                        <th>Должность</th>
+                                        <th>Телефон</th>
+                                        <th>Доступ</th>
+                                        <th>Дата регистрации</th>                            
+                                        <th></th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+                                        <!-- data -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="analysis">
+                        <div class="container">
+                            <div class="analysis_inner">
+                                <p>▼ Прочее</p>
+                            </div>
+                        </div>
+                    </div>
+
+            </section>
+
+            <section hidden id="report_section">
+
+                <div class="analysis">
+                    <div class="container">
+                        <div class="analysis_inner">
+                            <p>▼ Анализ</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="filter">
+                    <div class="container">
+                        <div class="filter_inner">
+                            <p>▼ Фильтр</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doclist">
+                    <div class="container">
+                        <div class="doclist_inner">
+                            <p>▼ Результат</p>
+                            <br>
+                            <div class="doclist_wrapper">
+
+                                <div class="doclist_control">
+                                    <div class="doclist_selection">
+                                        <button class="toolbar_button">Все приказы</button>
+                                        <button class="toolbar_button">Мои приказы</button>
+                                    </div>
+                                    <div class="doclist_edit">
+                                        <button class="toolbar_button">Сформировать отчет</button>
+                                    </div>
+                                </div>
+                                
+                                <table>
+                                    <thead>
+                                        <th style="width: 15%">Автор</th>
+                                        <th style="width: 60%">Заголовок</th>
+                                        <th style="width: 10%">Осталось</th>
+                                        <th style="width: 20%">Дата изменения</th>
+                                    </thead>
+                                    <tbody id="doclist_all">
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section hidden id="settings_section">
+
+                <div class="assignment">
+                    <div class="container">
+                        <div class="assignment_inner">
+                            <p>▼ Настройки аккаунта</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="analysis">
+                    <div class="container">
+                        <div class="analysis_inner">
+                            <p>▼ Контактные данные</p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="container">
+            <div class="footer_inner">
+                <div class="footer_logo">
+                    <a href="index.html"><img src="res/images/main/logo.png" alt="Logo" width="100%" height="auto"></a>
+                </div>
+                <div class="footer_nav">
+                    <!-- Footer section -->
+                </div>
+                <div class="footer_copyright">
+                    <ul class="footer_extern">
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Blog</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">VK</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Facebook</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Reddit</a></li>
+                        <li class="footer_extern_item"><a href="#" class="footer_extern_link">Youtube</a></li>
+                    </ul>
+                    <ul class="footer_about">
+                        <p class="footer_about_elem">Copyright</p>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/index.js"></script>
+</html>

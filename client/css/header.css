@@ -1,0 +1,48 @@
+.header {
+    /*width: 100%;*/
+    max-width: 1280px;
+    margin: auto;
+}
+
+.header_inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 0.4em;
+    /* white-space: nowrap; */
+    /* flex-wrap: wrap; */
+}
+
+.header_info {
+    display: flex;
+    align-items: center;
+}
+
+.header_logo {
+    /* display: flex; */
+    padding-left: 1mm;
+    padding-right: 3mm;
+    width: 40px;
+}
+
+.header_nav {
+    float: right;
+    display: flex;
+    justify-content: right;
+    /* padding: 0 5.7em; */
+    /* width: 27%; */
+}
+
+/* .header_search_box {
+    padding: 0 0.5em;
+} */
+
+.header_auth {
+    padding: 0 0.5em;
+}
+
+.header_user {
+    padding: 0 0.5em;
+}
+
