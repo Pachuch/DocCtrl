@@ -25,6 +25,33 @@
     width: 85%
 }
 
+#file-input {
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    filter: alpha(opacity=0); /* IE < 9 */
+    opacity: 0;
+  }
+
+.input-label {
+    display: inline-block;
+    vertical-align: top;
+    /* height: 1.7em; */
+    /* margin-top: 50px; */
+    padding: 15px;
+    border: 1px solid #888888;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: 0.5s;
+    border: opacity 1px;
+    cursor: pointer;
+}
+
 .clauses_control,
 .files_control,
 .owners_control {
@@ -37,10 +64,8 @@
     border-radius: 5px;
 }
 
-.popup_addowner {
-    display: none;
-}
-
+.popup_addclause,
+.popup_addfile,
 .popup_addowner {
     display: none;
     position: fixed;
@@ -55,6 +80,8 @@
     background-color: rgba(0, 0, 0, 0.4);
   }
 
+.popup_addclause_inner,
+.popup_addfile_inner,
 .popup_addowner_inner {
     background-color: #fefefe;
     margin: auto;
@@ -63,6 +90,8 @@
     width: 450px;
 }
 
+.popup_addclause_wrapper,
+.popup_addfile_wrapper,
 .popup_addowner_wrapper {
     margin: 5px;
     padding: 15px;

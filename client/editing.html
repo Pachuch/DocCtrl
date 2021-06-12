@@ -26,19 +26,16 @@
                     <a href="index.html" class="header_logo"><img src="res/images/main/rainbow.png" alt="Logo" width="80%" height="auto"></a>
                     <a href="#">Сайт УГЛТУ</a>
                 </div>
-                <!-- <div class="header_extern">
-                    Links
-                </div> -->
+
                 <nav class="header_nav">
                     <form action="#" class="header_search_box">
-                        <!-- <label for="search_input">Search</label> -->
                         <input type="text" id="search_input" name="search_input">
                         <input type="submit" value="Поиск">
                     </form>
                     
                     <div class="header_auth">
-                        <a href="#" class="header_login">Войти</a>
-                        <a href="#" class="header_signup">Регистрация</a>
+                        <a href="index.html" class="header_login">Войти</a>
+                        <a href="index.html" class="header_signup">Регистрация</a>
                     </div>
 
                     <div class="header_user" style="display: none;">
@@ -114,6 +111,7 @@
                     </div>
                 </div>
 
+                <!-- Clauses -->
                 <div class="clauses">
                     <div class="container">
                         <div class="clauses_inner">
@@ -145,6 +143,7 @@
                     </div>
                 </div>
 
+                <!-- Files -->
                 <div class="files">
                     <div class="container">
                         <div class="files_inner">
@@ -175,6 +174,7 @@
                     </div>
                 </div>
 
+                <!-- Owners -->
                 <div class="owners">
                     <div class="container">
                         <div class="owners_inner">
@@ -209,6 +209,43 @@
         </div>
     </div>
 
+    <!-- Add Clause Window -->
+    <div id="mAddClausePopup" class="popup_addclause">
+        <div class="popup_addclause_inner">
+            <span class="popup_btn_close" title="Close">&times;</span>
+            <div class="popup_addclause_wrapper">
+
+                <table id="popupClausesList">
+                    <thead>
+                        <th style="width: 60%">ФИО</th>
+                        <th style="width: 40%">Имя пользователя</th>
+                    </thead>
+                    <tbody id="clauses_list_choose">
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add File Window -->
+    <div id="mAddFilePopup" class="popup_addfile">
+        <div class="popup_addfile_inner">
+            <span class="popup_btn_close" title="Close">&times;</span>
+            <div class="popup_addfile_wrapper">
+                <!-- <form class="signup_popup_wrapper" action="/searchFile">
+                    <input type="text" id="popupSearchInput" class="popup_search_input" placeholder="Загрузка файла" name="popupSearchInput">
+                    <input type="file" style="position: fixed; top: -100em">
+                </form> -->
+                <label for="file-input">
+                    <div class="input-label">Выбрать файл</div>
+                </label>
+                <input type="file" id="file-input">
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Owner Window -->
     <div id="mAddOwnerPopup" class="popup_addowner">
         <div class="popup_addowner_inner">
             <span class="popup_btn_close" title="Close">&times;</span>

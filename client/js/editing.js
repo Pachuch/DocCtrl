@@ -1,33 +1,80 @@
-const add_owner_popup = document.querySelector('#mAddOwnerPopup');
+/////////////////////////////////////////////////////////////////////////////////
+// button handles                                                              //
+/////////////////////////////////////////////////////////////////////////////////
 
-document.getElementsByClassName("popup_btn_close")[0].addEventListener("click", (evt) => add_owner_popup.style.display = "none");
+const popup_button = {
+    add_clause    : document.querySelector('#addClauseBtn'),
+    add_file      : document.querySelector('#addFileBtn'),
+    add_owner     : document.querySelector('#addOwnerBtn')
+};
 
-document.querySelector('#createClauseBtn').addEventListener('click', (event) => {
-    console.dir(event);
+const popup_btn_close = document.getElementsByClassName("popup_btn_close");
+
+
+/////////////////////////////////////////////////////////////////////////////////
+// popup window handles                                                        //
+/////////////////////////////////////////////////////////////////////////////////
+
+const popup_window = {
+    add_clause  : document.querySelector('#mAddClausePopup'),
+    add_file    : document.querySelector('#mAddFilePopup'),
+    add_owner   : document.querySelector('#mAddOwnerPopup')
+};
+
+/////////////////////////////////////////////////////////////////////////////////
+// triggers                                                                    //
+/////////////////////////////////////////////////////////////////////////////////
+
+// load the table when the page was loaded
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('http://localhost:3001/insertDraftRecord') // TODO new record insertion
+    .then(response => response.json())
+    .then(data => loadOwnersTable(data['data']));
 });
 
-// when user attemts to add an owner
-document.querySelector('#addOwnerBtn').onclick = () => {
-    document.querySelector('#mAddOwnerPopup').style.display = 'block';
+/////////////////////////////////////////////////////////////////////////////////
+// listeners                                                                   //
+/////////////////////////////////////////////////////////////////////////////////
+
+// window listener
+window.onclick = (event) => {
+    for (const [key, obj] of Object.entries(popup_window)) {
+        if (event.target == obj) {
+            obj.style.display = "none";
+        }
+    }
+};
+
+// popup close button listener
+for (btn of popup_btn_close) {
+    btn.addEventListener("click", (evt) => {
+        evt.path[2].style.display = "none";
+    });
+}
+
+// !insertion buttons!
+
+// add a file button click
+popup_button.add_file.onclick = () => {
+    popup_window.add_file.style.display = 'block';
+
+
+
+    // TODO then upload it to the server (ohh fuck)
+
+    // fetch('http://localhost:3001/getUsersTable')
+    // .then(response => response.json())
+    // .then(data => loadPopupOwnersTable(data['data']));
+}
+
+// add an owner button click
+popup_button.add_owner.onclick = () => {
+    popup_window.add_owner.style.display = 'block';
 
     fetch('http://localhost:3001/getUsersTable')
     .then(response => response.json())
     .then(data => loadPopupOwnersTable(data['data']));
-
 }
-
-window.onclick = (event) => {
-    if(event.target == add_owner_popup)
-    add_owner_popup.style.display = "none";
-};
-
-// load the table when the page was loaded
-
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:3001/insertDraftRecord')
-    .then(response => response.json())
-    .then(data => loadOwnersTable(data['data']));
-});
 
 // set the elements in the table clickable
 document.querySelector('#popupOwnersList tbody').addEventListener('click', (event) => {
@@ -38,9 +85,42 @@ document.querySelector('#popupOwnersList tbody').addEventListener('click', (even
         .then(response => response.json())
         .then(data => getRowById(data['data'], event.target.dataset.id));
 
-        add_owner_popup.style.display = "none";
+        popup_window.add_owner.style.display = "none";
     }
 });
+
+/////////////////////////////////////////////////////////////////////////////////
+// functions                                                                   //
+/////////////////////////////////////////////////////////////////////////////////
+
+function insertRowIntoOwnersTable(data) {
+    const table = document.querySelector('#ownersList tbody');
+    const idTableData = table.querySelector('.no-data');
+
+    let tableHTML = "<tr>";
+
+    for(let elem in data) {
+        if(data.hasOwnProperty(key)) {
+
+            if(key === 'RegistrationDate') {
+                data[key] = new Date(data[key]).toLocaleString();
+            }
+
+            tableHTML += `<td>${data[key]}</td>`;
+        }
+    }
+
+    tableHTML += `<td><button class="edit_row_btn" data-id=${data.UserID}>Ред.</td>`;
+    tableHTML += `<td><button class="delete_row_btn" data-id=${data.UserID}>&times;</td>`;
+    tableHTML += "</tr>";
+    
+    if(isTableData) {
+        table.innerHTML = tableHTML;
+    } else {
+        const newRow = table.insertRow();
+        newRow.innerHTML = tableHTML;
+    }
+}
 
 function getRowById(data, id) {
     const table = document.querySelector('#ownersList tbody');
@@ -79,61 +159,6 @@ function deleteRowById(id) {
             location.reload();
         }
     });
-}
-// push data when signing up
-document.querySelector('#registerBtn').onclick = () => {
-    const usernameValue = document.querySelector('#signupUsername').value;
-    const emailValue = document.querySelector('#signupEmail').value;
-    const passwordValue = document.querySelector('#signupPassword').value;
-    const fullnameValue = document.querySelector('#signupFullname').value;
-    const positionValue = document.querySelector('#signupPosition').value;
-    const phoneValue = document.querySelector('#signupPhone').value;
-
-    fetch('http://localhost:3001/insertUser', {
-        headers: {
-            'Content-type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-            Username : usernameValue,
-            Email : emailValue,
-            Password : passwordValue,
-            Fullname : fullnameValue,
-            Position : positionValue,
-            Phone : phoneValue
-        }, null, '\t')
-    })
-    .then(response => response.json())
-    .then(data => insertRowIntoUsersTable(data['data']));
-}
-
-function insertRowIntoOwnersTable(data) {
-    const table = document.querySelector('#ownersList tbody');
-    const idTableData = table.querySelector('.no-data');
-
-    let tableHTML = "<tr>";
-
-    for(let elem in data) {
-        if(data.hasOwnProperty(key)) {
-
-            if(key === 'RegistrationDate') {
-                data[key] = new Date(data[key]).toLocaleString();
-            }
-
-            tableHTML += `<td>${data[key]}</td>`;
-        }
-    }
-
-    tableHTML += `<td><button class="edit_row_btn" data-id=${data.UserID}>Ред.</td>`;
-    tableHTML += `<td><button class="delete_row_btn" data-id=${data.UserID}>&times;</td>`;
-    tableHTML += "</tr>";
-    
-    if(isTableData) {
-        table.innerHTML = tableHTML;
-    } else {
-        const newRow = table.insertRow();
-        newRow.innerHTML = tableHTML;
-    }
 }
 
 function loadOwnersTable(data) {
@@ -184,3 +209,8 @@ function loadPopupOwnersTable(data) {
 
     table.innerHTML = tableHTML;
 }
+
+//TODO debug info
+document.querySelector('#createClauseBtn').addEventListener('click', (event) => {
+    console.dir(event);
+});

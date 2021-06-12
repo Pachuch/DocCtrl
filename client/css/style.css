@@ -99,12 +99,14 @@ table, th, td {
     font-weight: 400;
 }
 
-th, td {
+td {
     padding: 5px;
 }
 
 th {
     background: white;
+    text-align: left;
+    padding: 8px 5px 8px 5px;
 }
 
 tr:nth-child(even) {
