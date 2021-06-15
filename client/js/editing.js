@@ -9,7 +9,7 @@ const popup_button = {
 };
 
 const popup_btn_close = document.getElementsByClassName("popup_btn_close");
-
+const input_files = document.querySelector('#file-input');
 
 /////////////////////////////////////////////////////////////////////////////////
 // popup window handles                                                        //
@@ -58,13 +58,17 @@ for (btn of popup_btn_close) {
 popup_button.add_file.onclick = () => {
     popup_window.add_file.style.display = 'block';
 
-
-
     // TODO then upload it to the server (ohh fuck)
 
     // fetch('http://localhost:3001/getUsersTable')
     // .then(response => response.json())
     // .then(data => loadPopupOwnersTable(data['data']));
+}
+
+input_files.oninput = () => {
+    for (const [key, file] of Object.entries(input_files.files)) {
+        console.log(file);
+    }
 }
 
 // add an owner button click

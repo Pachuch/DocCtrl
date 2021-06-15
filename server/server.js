@@ -1,8 +1,11 @@
 const express = require("express");
 const session = require("express-session");
-const app = express();
 const cors = require('cors');
 const dotenv = require('dotenv');
+const multer = require('multer');
+const uuid = require('uuid').v4;
+
+const app = express();
 dotenv.config();
 const dbService = require('./dbService');
  
@@ -20,6 +23,7 @@ app.use(session({
     secure: true
   }
 }));
+app.use(express.static('public'));
 
 const redirectLogin = (request, response, next) => {
   if(!request.session.userId) {
@@ -28,6 +32,20 @@ const redirectLogin = (request, response, next) => {
     next();
   }
 };
+
+const storage = multer.diskStorage({
+
+  destination: (req, file, cb) => {
+    cb(null, 'uploads');
+  },
+
+  filename: (req, file, cb) => {
+    const {originalname} = file;
+    cb(null, `${uuid()}-${originalname}`);
+  }
+});
+
+const upload = multer({ storage });
 
 // routes
 
@@ -76,6 +94,10 @@ app.post('/updateDocument', (request, resonse) => {
    result
    .then(data => response.json({data: data}))
    .catch(err => console.log(err));
+});
+
+app.post('/upload', upload.single('document'), (request, response) => {
+  return response.json({status: "OK "});
 });
 
 // read
