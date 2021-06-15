@@ -1,3 +1,0 @@
-Get-Alias - show all internal PS commands
-Get-Process - show list for active processes
-Get-Command - show details of a command
