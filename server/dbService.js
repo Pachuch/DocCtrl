@@ -13,6 +13,8 @@ const connection = mysql.createPool({
     connectionLimit: process.env.DB_LIMIT
 });
 
+connection.query("SET FOREIGN_KEY_CHECKS=0"); // TODO: disabled key checks
+
 // TODO: add check if connection was created successfully
 
 function spreadQuestionmarks(count) {
@@ -54,7 +56,7 @@ class dbService {
 
             return response;
 
-        }catch(error){
+        } catch(error){
             console.log(error);
         }
     }
@@ -63,22 +65,64 @@ class dbService {
         
         try { 
 
-            const insertId = await new Promise((resolve, reject) =>
+            body = await new Promise((resolve, reject) =>
             {
                 const query = `INSERT INTO ${table} (${Object.keys(body)}) VALUES (${spreadQuestionmarks(Object.keys(body).length)})`;
 
                 connection.query(query, Object.values(body), (err, result) => 
                 {
                     if(err) reject(new Error(err.message));
-                    resolve(result.insertId);
+                    resolve(Object.assign({insertId : result.insertId}, body));
                 });
             });
-            
-            Object.assign({id : insertId}, body);
 
             return body;
 
         } catch(error) {
+            console.log(error);
+        }
+    }
+
+    async update(table, record_id, body) {
+        
+        try { 
+
+            body = await new Promise((resolve, reject) =>
+            {
+                const query = `UPDATE ${table} SET ? WHERE ${table}ID = ?`;
+                connection.query(query, [body, record_id], (err, result) => 
+                {
+                    if(err) reject(new Error(err.message));
+                    resolve(Object.assign({insertId : record_id}, body));
+                });
+            });
+            
+            return body;
+
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    async retrieve(table, rowId) {
+
+        try {
+            const response = await new Promise((resolve, reject) =>
+            {
+                const query = `SELECT * FROM ${table} WHERE ${table}ID = ${rowId}`;
+
+                connection.query(query, (err, results) => 
+                {
+                    if(err) {
+                        reject(new Error(err.message));
+                    }
+                    resolve(results);
+                });
+            });
+
+            return response;
+
+        }catch(error){
             console.log(error);
         }
     }
@@ -89,7 +133,7 @@ class dbService {
         try {
             const response = await new Promise((resolve, reject) =>
             {
-                const query = `DELETE FROM ${info.table} WHERE ${info.keyName} = ?`;
+                const query = `DELETE FROM ${info.table} WHERE ${info.table}ID = ?`;
     
                 connection.query(query, [id], (err, result) => 
                 {
@@ -105,6 +149,94 @@ class dbService {
         }
     }
 
+    async deleteMiddleById(params) {
+
+        const { table, parent, parentValue, child, childValue } = params;
+
+        try {
+            const response = await new Promise((resolve, reject) =>
+            {
+                const query = `DELETE FROM ${table} WHERE ${parent} = ${parentValue} AND ${child} = ${childValue}`;
+    
+                connection.query(query, (err, result) => 
+                {
+                    if(err) reject(new Error(err.message));
+                    resolve(result.affectedRows);
+                });
+            });
+
+            return response === 1 ? true : false;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+
+    async getRecordClauses(RecordId) {
+
+        try {
+            const response = await new Promise((resolve, reject) =>
+            {
+                const query = `SELECT ClauseID, Number, Body, Performers, ExpirationDate, ReportID FROM Clause WHERE ClauseID IN (SELECT ClauseID FROM RecordClause WHERE RecordID = ${RecordId})`
+
+                connection.query(query, (err, results) => 
+                {
+                    if(err) {
+                        reject(new Error(err.message));
+                    }
+                    resolve(results);
+                });
+            });
+            return response;
+
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    async getRecordFiles(RecordId) {
+        try {
+            const response = await new Promise((resolve, reject) =>
+            {
+                const query = `SELECT FileID, Name, Path, Type FROM File WHERE FileID IN (SELECT FileID FROM RecordFile WHERE RecordID = ${RecordId})`
+
+                connection.query(query, (err, results) => 
+                {
+                    if(err) {
+                        reject(new Error(err.message));
+                    }
+                    resolve(results);
+                });
+            });
+            return response;
+
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    async getRecordOwners(RecordId) {
+
+        try {
+            const response = await new Promise((resolve, reject) =>
+            {
+                const query = `SELECT UserID, Fullname, Position FROM User WHERE UserID IN (SELECT UserID FROM RecordOwner WHERE RecordID = ${RecordId})`
+
+                connection.query(query, (err, results) => 
+                {
+                    if(err) {
+                        reject(new Error(err.message));
+                    }
+                    resolve(results);
+                });
+            });
+
+            return response;
+
+        }catch(error){
+            console.log(error);
+        }
+    }
 };
 
 module.exports = dbService;

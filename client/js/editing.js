@@ -1,3 +1,27 @@
+//import {record} from './data.js'
+
+const doc_idx = localStorage.getItem("iCurrentDocumentIndex");
+var clauseCounter = 0;
+var temporary;
+
+/////////////////////////////////////////////////////////////////////////////////
+// text fields                                                                 //
+/////////////////////////////////////////////////////////////////////////////////
+
+const text_field = {
+    number          : document.querySelector('#number'),
+    head            : document.querySelector('#head'),
+    basis           : document.querySelector('#basis'),
+    date            : document.querySelector('#date'),
+    access_stamp    : document.querySelector('#accessStamp')
+};
+
+const clause_text_fields = {
+    body : document.querySelector('#clause_body'),
+    performers : document.querySelector('#performers'),
+    expirationdate : document.querySelector('#expirationdate')
+};
+
 /////////////////////////////////////////////////////////////////////////////////
 // button handles                                                              //
 /////////////////////////////////////////////////////////////////////////////////
@@ -9,7 +33,10 @@ const popup_button = {
 };
 
 const popup_btn_close = document.getElementsByClassName("popup_btn_close");
-const input_files = document.querySelector('#file-input');
+const popup_btn_cancel = document.getElementsByClassName("popup_btn_cancel");
+const submit_file_btn = document.querySelector('#submitFileBtn');
+const input_files = document.getElementsByName("document_order")[0];
+const finish_clause_btn = document.querySelector('#finishClauseBtn');
 
 /////////////////////////////////////////////////////////////////////////////////
 // popup window handles                                                        //
@@ -22,14 +49,45 @@ const popup_window = {
 };
 
 /////////////////////////////////////////////////////////////////////////////////
+// tables                                                                      //
+/////////////////////////////////////////////////////////////////////////////////
+
+const table = {
+    clauses         : document.querySelector('#clausesList tbody'),
+    files           : document.querySelector('#filesList tbody'),
+    owners          : document.querySelector('#ownersList tbody'),
+    popup_owners    : document.querySelector('#popupOwnersList tbody')
+};
+
+/////////////////////////////////////////////////////////////////////////////////
 // triggers                                                                    //
 /////////////////////////////////////////////////////////////////////////////////
 
 // load the table when the page was loaded
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:3001/insertDraftRecord') // TODO new record insertion
-    .then(response => response.json())
-    .then(data => loadOwnersTable(data['data']));
+
+    // TODO load page with data
+
+    if (localStorage.getItem("bCreateNewRecord") === "false") {
+        // 1. retrieve item
+        // 2. update values
+        // 3. update sql table
+
+        // retrieve
+        fetch(`http://localhost:3001/retrieve/?table=Record&rowId=${localStorage.getItem("iCurrentDocumentIndex")}`)
+        .then(response => response.json())
+        .then(data => {
+            text_field.number.value = data.data[0].Number;
+            text_field.date.value = data.data[0].DocumentDate?.slice(0, 19).replace('T', ' ');
+            text_field.access_stamp.value = data.data[0].AccessStamp;
+            text_field.head.value = data.data[0].Header;
+            text_field.basis.value = data.data[0].Basis;
+
+            loadClauseTable();
+            loadFileTable();
+            loadOwnerTable();
+        });
+    }
 });
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -52,44 +110,268 @@ for (btn of popup_btn_close) {
     });
 }
 
+for (btn of popup_btn_cancel) {
+    btn.addEventListener("click", (evt) => {
+        // console.log(evt.path);
+        evt.path[5].style.display = "none";
+    });
+}
+
+// edit control listeners
+
+for (editCtrl of Object.values(text_field)) {
+    editCtrl.onchange = () => {
+        updateDocument("draft");
+    }
+}
+
+document.querySelector('#doneBtn').onclick = () => {
+    //TODO: checks if the document was not filled completely
+    updateDocument("release");
+    window.location.href = "index.html";
+}
+
 // !insertion buttons!
+
+popup_button.add_clause.onclick = () => {
+    finish_clause_btn.dataset.mode = "new";
+    finish_clause_btn.innerHTML = "Создать";
+    clause_text_fields.body.value = "";
+    clause_text_fields.performers.value = "";
+    clause_text_fields.expirationdate.value = "1999-12-31";
+    popup_window.add_clause.style.display = 'block';
+}
+
+// submit clause to the server
+finish_clause_btn.onclick = () => {
+
+    clauseCounter++;
+
+    const newRow = {
+        Number: clauseCounter,
+        Body: clause_text_fields.body.value,
+        Performers: clause_text_fields.performers.value,
+        ExpirationDate : clause_text_fields.expirationdate.value
+    };
+    
+    if (finish_clause_btn.dataset.mode === "new") {
+
+        // new clause on the server
+        fetch(`http://localhost:3001/insert/?table=Clause&Number=${newRow.Number}&Body=${newRow.Body}&Performers=${newRow.Performers}&ExpirationDate=${newRow.ExpirationDate}`, {
+            headers: {
+                'Content-type': 'message/http'
+            },
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            
+            // hooking with record on the server
+            fetch(`http://localhost:3001/insert/?table=RecordClause&RecordId=${doc_idx}&ClauseId=${data.data.insertId}`, {
+                headers: {
+                    'Content-type': 'message/http'
+                },
+                method: 'POST'
+            }).then(response => response.json())
+            .then(() => clausesInsertRow({ ClauseID: data.data.insertId, ...newRow }));
+        });
+
+
+    } else {
+
+        fetch(`http://localhost:3001/updateDocument/?table=Clause&rowId=${temporary}`, {
+            headers: {
+                'Content-type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                Body          : newRow.Body,
+                Performers    : newRow.Performers,
+                ExpirationDate: newRow.ExpirationDate
+            }, null, '\t')
+        })
+        .then(response => response.json())
+        .then(() => location.reload());
+    }
+
+    popup_window.add_clause.style.display = 'none';
+}
+
+// set the elements in the clauses table deleteable
+table.clauses.addEventListener('click', (event) => {
+    if (event.target.className === 'edit_row_btn') {
+
+        fetch(`http://localhost:3001/retrieve/?table=Clause&rowId=${event.target.dataset.id}`)
+        .then(response => response.json())
+        .then(data => 
+        {
+            clause_text_fields.body.value = data.data[0].Body;
+            clause_text_fields.performers.value = data.data[0].Performers;
+            clause_text_fields.expirationdate.value = data.data[0].ExpirationDate.slice(0, 10).replace('T', ' ');
+            finish_clause_btn.dataset.mode = "update";
+            finish_clause_btn.innerHTML = "Обновить";
+            popup_window.add_clause.style.display = 'block';
+            temporary = event.target.dataset.id;
+        });
+
+    }
+
+    if(event.target.className === 'delete_row_btn') {
+
+        const cls_idx = event.target.dataset.id;
+
+        fetch(`http://localhost:3001/deleteMiddle/?table=RecordClause&parent=RecordID&parentValue=${doc_idx}&child=ClauseID&childValue=${cls_idx}`, {
+        headers: {
+            'Content-type': 'message/http'
+        },
+        method: 'DELETE'
+        })
+        .then(response => response.json());
+
+        fetch('http://localhost:3001/delete/' + cls_idx, {
+            headers: {
+                'Content-type': 'application/json'
+            },
+            method: 'DELETE',
+            body: JSON.stringify({
+                table : "Clause"
+            }, null, '\t')
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                location.reload();
+            }
+        });
+    }
+});
 
 // add a file button click
 popup_button.add_file.onclick = () => {
     popup_window.add_file.style.display = 'block';
 
-    // TODO then upload it to the server (ohh fuck)
-
-    // fetch('http://localhost:3001/getUsersTable')
-    // .then(response => response.json())
-    // .then(data => loadPopupOwnersTable(data['data']));
 }
 
-input_files.oninput = () => {
-    for (const [key, file] of Object.entries(input_files.files)) {
-        console.log(file);
+// file choose button
+// input_files.oninput = () => {
+//     for (const [key, file] of Object.entries(input_files.files)) {
+//         console.log(file);
+//     }
+// }
+
+// file submit button
+submit_file_btn.onclick = () => {
+    if (input_files.files.length > 0) {
+
+        const form = document.querySelector('#uploadForm');
+        const formData = new FormData(form);
+
+        fetch(`http://localhost:3001/upload`, {
+        method: 'POST',
+        body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            fetch(`http://localhost:3001/insert/?table=File&Name=${input_files.files[0].name}&Path=${data.file.path}&Type=${input_files.files[0].type}`, {
+                headers: {
+                    'Content-type': 'message/http'
+                },
+                method: 'POST'
+            }).then(response => response.json()) // clausesInsertRow({ ClauseID: data.data.insertId, ...newRow })
+            .then(subdata => {
+
+                // hooking with record on the server
+                fetch(`http://localhost:3001/insert/?table=RecordFile&RecordId=${doc_idx}&FileId=${subdata.data.insertId}`, {
+                    headers: {
+                        'Content-type': 'message/http'
+                    },
+                    method: 'POST'
+                }).then(() => filesInsertRow({ FileID: subdata.data.insertId, Name: input_files.files[0].name, Path: data.file.path }));
+
+            });
+
+        });
+    } 
+
+    popup_window.add_file.style.display = 'none';
+}
+
+// set the elements in the onwers table deleteable
+table.files.addEventListener('click', (event) => {
+    if(event.target.className === 'delete_row_btn') {
+
+        const file_idx = event.target.dataset.id;
+
+        fetch(`http://localhost:3001/deleteMiddle/?table=RecordFile&parent=RecordID&parentValue=${doc_idx}&child=FileID&childValue=${file_idx}`, {
+            headers: { 'Content-type': 'message/http' },
+            method: 'DELETE'
+        });
+
+        fetch(`http://localhost:3001/deleteRecordFile/?fileName=${event.target.dataset.path}`, {
+            headers: { 'Content-type': 'message/http' },
+            method: 'DELETE'
+        })
+        .then(() => {
+            fetch('http://localhost:3001/delete/' + file_idx, {
+                headers: { 'Content-type': 'application/json' },
+                method: 'DELETE',
+                body: JSON.stringify({
+                    table : "File"
+                }, null, '\t')
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    location.reload();
+                }
+            });
+        });
     }
-}
+});
 
 // add an owner button click
 popup_button.add_owner.onclick = () => {
     popup_window.add_owner.style.display = 'block';
 
-    fetch('http://localhost:3001/getUsersTable')
+    fetch('http://localhost:3001/getTable/User') // TODO: (sql query) show users except existing
     .then(response => response.json())
     .then(data => loadPopupOwnersTable(data['data']));
 }
 
-// set the elements in the table clickable
-document.querySelector('#popupOwnersList tbody').addEventListener('click', (event) => {
+// set the elements in the popup owners table clickable
+table.popup_owners.addEventListener('click', (event) => {
     if(event.target.className === 'query_row') {
-        // deleteRowById(event.target.dataset.id);
 
-        fetch('http://localhost:3001/getUsersTable')
+        fetch(`http://localhost:3001/retrieve/?table=User&rowId=${event.target.dataset.id}`)
         .then(response => response.json())
-        .then(data => getRowById(data['data'], event.target.dataset.id));
+        .then(data => ownersInsertRow(data.data[0]));
+
+        fetch(`http://localhost:3001/insert/?table=RecordOwner&RecordId=${localStorage.getItem("iCurrentDocumentIndex")}&UserId=${event.target.dataset.id}`, {
+        headers: {
+            'Content-type': 'message/http'
+        },
+        method: 'POST'
+        })
+        .then(response => response.json());
 
         popup_window.add_owner.style.display = "none";
+    }
+});
+
+// set the elements in the onwers table deleteable
+table.owners.addEventListener('click', (event) => {
+    if(event.target.className === 'delete_row_btn') {
+
+        const usr_idx = event.target.dataset.id;
+
+        fetch(`http://localhost:3001/deleteMiddle/?table=RecordOwner&parent=RecordID&parentValue=${doc_idx}&child=UserID&childValue=${usr_idx}`, {
+        headers: {
+            'Content-type': 'message/http'
+        },
+        method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(() => location.reload());
     }
 });
 
@@ -97,111 +379,70 @@ document.querySelector('#popupOwnersList tbody').addEventListener('click', (even
 // functions                                                                   //
 /////////////////////////////////////////////////////////////////////////////////
 
-function insertRowIntoOwnersTable(data) {
-    const table = document.querySelector('#ownersList tbody');
-    const idTableData = table.querySelector('.no-data');
+function updateDocument(status) {
 
-    let tableHTML = "<tr>";
-
-    for(let elem in data) {
-        if(data.hasOwnProperty(key)) {
-
-            if(key === 'RegistrationDate') {
-                data[key] = new Date(data[key]).toLocaleString();
-            }
-
-            tableHTML += `<td>${data[key]}</td>`;
-        }
-    }
-
-    tableHTML += `<td><button class="edit_row_btn" data-id=${data.UserID}>Ред.</td>`;
-    tableHTML += `<td><button class="delete_row_btn" data-id=${data.UserID}>&times;</td>`;
-    tableHTML += "</tr>";
-    
-    if(isTableData) {
-        table.innerHTML = tableHTML;
-    } else {
-        const newRow = table.insertRow();
-        newRow.innerHTML = tableHTML;
-    }
-}
-
-function getRowById(data, id) {
-    const table = document.querySelector('#ownersList tbody');
-    let tableRow = ``;
-
-    data.forEach(({UserID, Username, Email, Password, Fullname, Position, Phone, Access, RegistrationDate, Deleted}) => {
-
-        if (UserID == id)
-        {
-            tableRow += "<tr>";
-            tableRow += `<td>${Fullname}</td>`;
-            tableRow += `<td>${Position}</td>`;
-            tableRow += `<td><button class="delete_row_btn" data-id=${UserID}>&times;</td>`;
-            tableRow += "</tr>";
-        }
-    });
-
-    table.innerHTML += tableRow;
-
-}
-
-function deleteRowById(id) {
-    fetch('http://localhost:3001/delete/' + id, {
+    // TODO new record insertion
+    fetch(`http://localhost:3001/updateDocument/?table=Record&rowId=${localStorage.getItem("iCurrentDocumentIndex")}`, {
         headers: {
             'Content-type': 'application/json'
         },
-        method: 'DELETE',
+        method: 'POST',
         body: JSON.stringify({
-            table : 'Users',
-            keyName : 'UserID',
+            UserID          : 2, // TODO: hook to current user id
+            Number          : document.querySelector('#number')?.value,
+            Header          : document.querySelector('#head')?.value,
+            Basis           : document.querySelector('#basis')?.value,
+            AccessStamp     : document.querySelector('#accessStamp')?.value,
+            Validation      : 0,
+            DocumentDate    : document.querySelector('#date').value?.slice(0, 19).replace('T', ' '),
+            ChangeDate      : new Date().toISOString().slice(0, 19).replace('T', ' '),
+            Status          : status
         }, null, '\t')
     })
-    .then(response => response.json())
-    .then(data => {
-        if(data.success) {
-            location.reload();
-        }
-    });
+    .then(response => response.json());
+    // .then(data => console.log(data));
 }
 
-function loadOwnersTable(data) {
-    const table = document.querySelector('#ownersList tbody');
-    
-    if(!data) {
-        table.innerHTML = "<tr><td class='no-data' colspan='11'><div style='margin: 0 auto; text-align: center;'>Error</div></td></tr>";
-        return;
-    }
+function clausesInsertRow(body) {
+    let tableRow = ``;
 
-    if(data.length === 0) {
-        table.innerHTML = "<tr><td class='no-data' colspan='11'><div style='margin: 0 auto; text-align: center;'>No Data</div></td></tr>";
-        return;
-    }
-    
-    let tableHTML = "";
-    data.forEach(({UserID,  Fullname, Position}) => {
-        tableHTML += "<tr>";
-        tableHTML += `<td class="query_row" data-id=${UserID}>${Fullname}</td>`;
-        tableHTML += `<td>${Position}</td>`;
-        tableHTML += `<td><button class="delete_row_btn" data-id=${UserID}>&times;</td>`;
-        tableHTML += "</tr>";
-    });
+    tableRow += "<tr>";
+    tableRow += `<td>${body.Number}</td>`;
+    tableRow += `<td>${body.Body}</td>`;
+    tableRow += `<td>${body.ExpirationDate?.slice(0, 10).replace('T', ' ')}</td>`;
+    tableRow += `<td><button class="edit_row_btn" data-id=${body.ClauseID}>Ред.</td>`;
+    tableRow += `<td><button class="delete_row_btn" data-id=${body.ClauseID}>&times;</td>`;
+    tableRow += "</tr>";
 
-    table.innerHTML = tableHTML;
+    table.clauses.innerHTML += tableRow;    
+}
+
+function filesInsertRow(body) {
+    let tableRow = ``;
+
+    console.log(body);
+
+    tableRow += "<tr>";
+    tableRow += `<td>${body.Name}</td>`;
+    tableRow += `<td><button class="delete_row_btn" data-id=${body.FileID} data-path=${body.Path}>&times;</td>`;
+    tableRow += "</tr>";
+
+    table.files.innerHTML += tableRow;  
+}
+
+function ownersInsertRow(body) {
+    let tableRow = ``;
+
+    tableRow += "<tr>";
+    tableRow += `<td>${body.Fullname}</td>`;
+    tableRow += `<td>${body.Position}</td>`;
+    tableRow += `<td><button class="delete_row_btn" data-id=${body.UserID}>&times;</td>`;
+    tableRow += "</tr>";
+
+    table.owners.innerHTML += tableRow;    
 }
 
 function loadPopupOwnersTable(data) {
-    const table = document.querySelector('#popupOwnersList tbody');
-    
-    if(!data) {
-        table.innerHTML = "<tr><td class='no-data' colspan='11'><div style='margin: 0 auto; text-align: center;'>Error</div></td></tr>";
-        return;
-    }
-
-    if(data.length === 0) {
-        table.innerHTML = "<tr><td class='no-data' colspan='11'><div style='margin: 0 auto; text-align: center;'>No Data</div></td></tr>";
-        return;
-    }
     
     let tableHTML = "";
     data.forEach(({UserID, Username, Fullname}) => {
@@ -211,10 +452,38 @@ function loadPopupOwnersTable(data) {
         tableHTML += "</tr>";
     });
 
-    table.innerHTML = tableHTML;
+    table.popup_owners.innerHTML = tableHTML;
 }
 
-//TODO debug info
-document.querySelector('#createClauseBtn').addEventListener('click', (event) => {
-    console.dir(event);
-});
+function loadClauseTable() {
+    fetch(`http://localhost:3001/getRecordClauses/?RecordId=${doc_idx}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.data[0]) {
+            for (row of data.data)
+                clausesInsertRow(row);
+        }
+    });
+}
+
+function loadFileTable() {
+    fetch(`http://localhost:3001/getRecordFiles/?RecordId=${doc_idx}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.data[0]) {
+            for (row of data.data)
+                filesInsertRow(row);
+        }
+    });
+}
+
+function loadOwnerTable() {
+    fetch(`http://localhost:3001/getRecordOwners/?RecordId=${doc_idx}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.data[0]) {
+            for (row of data.data)
+                ownersInsertRow(row);
+        }
+    });
+}

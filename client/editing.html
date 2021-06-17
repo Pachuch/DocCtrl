@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="css/header.css"/>
     <link rel="stylesheet" type="text/css" href="css/toolbar.css">
     <link rel="stylesheet" type="text/css" href="css/editing.css">
+    <link rel="stylesheet" type="text/css" href="css/popup.css">
 </head>
 <body>
     <header class="header">
@@ -56,7 +57,8 @@
                 </div>
                 <div class="toolbar_edit">
                     <form method='POST' id="updateDocument">
-                        <button class="toolbar_button" formaction="/updateDocument">Готово</button>
+                        <!-- <button id="doneBtn" class="toolbar_button" formaction="/updateDocument">Готово</button> -->
+                        <input type="button" id="doneBtn" class="toolbar_button" value="Готово">
                     </form>
                 </div>
 
@@ -90,7 +92,7 @@
                                 </div>
                                 <div class="general_field">
                                     <label for="date" class="general_label">Дата</label>
-                                    <input type="text" id="date" class="general_text_input" placeholder="Введите дату" name="date" required>
+                                    <input type="text" id="date" class="general_text_input" placeholder="Введите дату" name="date" value="1999-12-31" required>
                                 </div>
                                 <div class="general_field">
                                     <label for="accessStamp" class="general_label">Гриф ограничения</label>
@@ -124,16 +126,16 @@
                                         <button class="toolbar_button">Мои приказы</button> -->
                                     </div>
                                     <div class="clauses_edit">
-                                        <button id="createClauseBtn">Создать пункт</button>
+                                        <button id="addClauseBtn">Создать пункт</button>
                                     </div>
                                 </div>
                             </div>
-                            <table>
+                            <table id="clausesList">
                                 <thead>
                                     <th style="width: 10%">№</th>
-                                    <th style="width: 60%">Заголовок</th>
-                                    <th style="width: 10%">Осталось</th>
-                                    <th style="width: 20%">Дата изменения</th>
+                                    <th style="width: 80%">Пункт</th>
+                                    <th style="width: 10%">Завершение</th>
+                                    <!-- <th style="width: 20%">Дата изменения</th> -->
                                 </thead>
                                 <tbody id="clausesListAll">
 
@@ -160,11 +162,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <table>
+                            <table id="filesList">
                                 <thead>
-                                    <th style="width: 10%">Автор</th>
+                                    <!-- <th style="width: 10%">Автор</th>
                                     <th style="width: 70%">Заголовок</th>
-                                    <th style="width: 20%">Дата загрузки</th>
+                                    <th style="width: 20%">Дата загрузки</th> -->
+                                    <th style="width: 100%">Название</th>
                                 </thead>
                                 <tbody id="filesListAll">
 
@@ -215,15 +218,31 @@
             <span class="popup_btn_close" title="Close">&times;</span>
             <div class="popup_addclause_wrapper">
 
-                <table id="popupClausesList">
-                    <thead>
-                        <th style="width: 60%">ФИО</th>
-                        <th style="width: 40%">Имя пользователя</th>
-                    </thead>
-                    <tbody id="clauses_list_choose">
+                <form class="popup_wrapper" id="newClauseForm" action="#">
+                    <h1>Новый пункт</h1>
+                    <p>Введите необходимые данные</p>
+                    <hr>
     
-                    </tbody>
-                </table>
+                    <div class="popup_addclause_body" style="display: block;">
+                        <label for="clause_body" class="popup_label"><b>Распоряжение</b><br></label>
+                        <textarea form="newClauseForm" name="clause_body" id="clause_body" class="general_text_input popup_area_input" rows="5" wrap="soft" placeholder="Введите распорядительную часть" required></textarea>
+                    </div>
+    
+                    <div class="popup_addclause_performers">
+                        <label for="performers" class="popup_label"><b>Исполнители</b><br></label>
+                        <input type="text" id="performers" class="popup_text_input" placeholder="Введите исполнителей через запятую" name="performers">
+                    </div>
+
+                    <div class="popup_addclause_expirationdate">
+                        <label for="expirationdate" class="popup_label"><b>Срок исполнения</b><br></label>
+                        <input type="text" id="expirationdate" class="popup_text_input" placeholder="Введите срок окончания" name="expirationdate" value="1999-12-31">
+                    </div>
+    
+                    <div class="popup_btn_confirmation">
+                        <button type="button" class="popup_btn_cancel">Отмена</button>
+                        <button type="button" id="finishClauseBtn" class="popup_btn_submit">Создать</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -234,10 +253,14 @@
             <span class="popup_btn_close" title="Close">&times;</span>
             <div class="popup_addfile_wrapper">
                 <h2>Добавить файл</h2><br>
-                <form action="http://localhost:3001/upload" method="POST" enctype="multipart/form-data">
-                <input type="file" id="file-input" name="document">
-                <button>Готово</button>
-                </form>
+
+                <div class="popup_addfile_controls" style="display: flex;justify-content: space-between;">
+                    <form id="uploadForm" action="http://localhost:3001/upload" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="document_order">
+                    </form>
+    
+                    <button id="submitFileBtn">Готово</button>
+                </div>
                 <!-- <label for="file-input">
                     <div class="input-label">Выбрать файл</div>
                 </label>
@@ -251,7 +274,7 @@
         <div class="popup_addowner_inner">
             <span class="popup_btn_close" title="Close">&times;</span>
             <div class="popup_addowner_wrapper">
-                <form class="signup_popup_wrapper" action="/searchUser">
+                <form class="popup_wrapper" action="/searchUser">
                     <input type="text" id="popupSearchInput" class="popup_search_input" placeholder="Поиск пользователей" name="popupSearchInput">
                 </form>
                 <table id="popupOwnersList">

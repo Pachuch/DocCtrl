@@ -43,7 +43,8 @@ a {
     border-radius: 5px;
 }
 
-button {
+button,
+input[type="button"] {
     display: inline-block;
     vertical-align: top;
     height: 1.7em;
@@ -60,7 +61,8 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+button:hover,
+input[type="button"]:hover {
     /* color: white; */
     background: rgb(143, 201, 255);
     transition: 0.2s;

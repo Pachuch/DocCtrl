@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="css/assignment.css"/>
     <link rel="stylesheet" type="text/css" href="css/analysis.css">
     <link rel="stylesheet" type="text/css" href="css/doclist.css">
-    <link rel="stylesheet" type="text/css" href="css/auth_popup.css">
+    <link rel="stylesheet" type="text/css" href="css/popup.css">
 </head>
 <body>
     <header class="header">
@@ -69,79 +69,79 @@
     </div>
 
     <!-- sign in popup -->
-    <div id="mLoginPopup" class="login_popup">
-        <div class="login_popup_inner">
-            <span class="login_btn_close" title="Close">&times;</span>
-            <form class="login_popup_wrapper" action="#">
+    <div id="mLoginPopup" class="popup">
+        <div class="popup_inner">
+            <span class="popup_btn_close" title="Close">&times;</span>
+            <form class="popup_wrapper" action="#">
                 <h1>Вход</h1>
                 <hr>
                 <div class="login_username" style="display: block;">
-                    <label for="loginUsername" class="login_label"><b>Имя пользователя</b><br></label>
-                    <input type="text" id="loginUsername" class="login_text_input" placeholder="Введите имя пользователя" name="loginUsername" required>
+                    <label for="loginUsername" class="popup_label"><b>Имя пользователя</b><br></label>
+                    <input type="text" id="loginUsername" class="popup_text_input" placeholder="Введите имя пользователя" name="loginUsername" required>
                 </div>
 
                 <div class="login_password">
-                    <label for="loginPassword" class="login_label"><b>Пароль</b><br></label>
-                    <input type="password" id="loginPassword" class="login_text_input" placeholder="Введите пароль" name="loginPassword">
+                    <label for="loginPassword" class="popup_label"><b>Пароль</b><br></label>
+                    <input type="password" id="loginPassword" class="popup_text_input" placeholder="Введите пароль" name="loginPassword">
                 </div>
 
                 <label>
                     <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Запомнить
                 </label>
-                <div class="login_btn_confirmation">
-                    <button type="button" class="login_btn_cancel">Отмена</button>
-                    <button type="submit" id="loginBtn" class="login_btn_submit">Войти</button>
+                <div class="popup_btn_confirmation">
+                    <button type="button" class="popup_btn_cancel">Отмена</button>
+                    <button type="submit" id="loginBtn" class="popup_btn_submit">Войти</button>
                 </div>
             </form>
         </div>
     </div>
 
      <!-- sign up popup -->
-    <div id="mSignUpPopup" class="signup_popup">
-        <div class="signup_popup_inner">
-            <span class="signup_btn_close" title="Close">&times;</span>
-            <form class="signup_popup_wrapper" action="#">
+    <div id="mSignUpPopup" class="popup">
+        <div class="popup_inner">
+            <span class="popup_btn_close" title="Close">&times;</span>
+            <form class="popup_wrapper" action="#">
                 <h1>Регистрация</h1>
                 <p>Зарегистрируйтесь в системе, чтобы отслеживать ваши действующие приказы</p>
                 <hr>
 
                 <div class="signup_username" style="display: block;">
-                    <label for="signupUsername" class="signup_label"><b>Имя пользователя</b><br></label>
-                    <input type="text" id="signupUsername" class="signup_text_input" placeholder="Введите имя пользователя" name="signupUsername" required>
+                    <label for="signupUsername" class="popup_label"><b>Имя пользователя</b><br></label>
+                    <input type="text" id="signupUsername" class="popup_text_input" placeholder="Введите имя пользователя" name="signupUsername" required>
                 </div>
 
                 <div class="signup_email">
-                    <label for="signupEmail" class="signup_label"><b>Email</b><br></label>
-                    <input type="text" id="signupEmail" class="signup_text_input" placeholder="Введите e- mail" name="signupEmail">
+                    <label for="signupEmail" class="popup_label"><b>Email</b><br></label>
+                    <input type="text" id="signupEmail" class="popup_text_input" placeholder="Введите e- mail" name="signupEmail">
                 </div>
 
                 <div class="signupPassword">
-                    <label for="passsignupPasswordword" class="signup_label"><b>Пароль</b><br></label>
-                    <input type="password" id="signupPassword" class="signup_text_input" placeholder="Введите пароль" name="signupPassword">
+                    <label for="passsignupPasswordword" class="popup_label"><b>Пароль</b><br></label>
+                    <input type="password" id="signupPassword" class="popup_text_input" placeholder="Введите пароль" name="signupPassword">
                 </div>
                 <hr>
                 <div class="signup_full_name" style="display: block;">
-                    <label for="signupFullname" class="signup_label"><b>ФИО</b><br></label>
-                    <input type="text" id="signupFullname" class="signup_text_input" placeholder="Введите фамилию, имя и отчество" name="signupFullname" required>
+                    <label for="signupFullname" class="popup_label"><b>ФИО</b><br></label>
+                    <input type="text" id="signupFullname" class="popup_text_input" placeholder="Введите фамилию, имя и отчество" name="signupFullname" required>
                 </div>
 
                 <div class="signup_position">
-                    <label for="signupPosition" class="signup_label"><b>Должность</b><br></label>
-                    <input type="text" id="signupPosition" class="signup_text_input" placeholder="Введите должность" name="signupPosition" required>
+                    <label for="signupPosition" class="popup_label"><b>Должность</b><br></label>
+                    <input type="text" id="signupPosition" class="popup_text_input" placeholder="Введите должность" name="signupPosition" required>
                 </div>
 
                 <div class="signup_phone">
-                    <label for="signupPhone" class="signup_label"><b>Номер тел.</b><br></label>
-                    <input type="text" id="signupPhone" class="signup_text_input" placeholder="Введите номер тел." name="signupPhone" required>
+                    <label for="signupPhone" class="popup_label"><b>Номер тел.</b><br></label>
+                    <input type="text" id="signupPhone" class="popup_text_input" placeholder="Введите номер тел." name="signupPhone" required>
                 </div>
 
                 <!-- <label>
                     <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Подписаться на новости
                 </label> -->
                 <p style="margin-bottom: 15px;">Отправляя заявку вы соглашаетесь на <a href="#" style="color:dodgerblue">обработку персональных данных</a>.</p>
-                <div class="signup_btn_confirmation">
-                    <button type="button" class="signup_btn_cancel">Отмена</button>
-                    <button type="submit" id="registerBtn" class="signup_btn_submit">Регистрация</button>
+                <div class="popup_btn_confirmation">
+                    <button type="button" class="popup_btn_cancel">Отмена</button>
+                    <button type="submit" id="registerBtn" class="popup_btn_submit">Регистрация</button>
                 </div>
             </form>
         </div>
@@ -149,50 +149,50 @@
 
     <!-- user edit popup -->
 
-    <!-- <div id="mUserEditPopup" class="signup_popup">
-        <div class="signup_popup_inner">
-            <span class="signup_btn_close" title="Close">&times;</span>
-            <form class="signup_popup_wrapper" action="#">
+    <!-- <div id="mUserEditPopup" class="popup">
+        <div class="popup_inner">
+            <span class="popup_btn_close" title="Close">&times;</span>
+            <form class="popup_wrapper" action="#">
                 <h1>Редактирование профиля</h1>
                 <hr>
 
                 <div class="signup_username" style="display: block;">
-                    <label for="username" class="signup_label"><b>Имя пользователя</b><br></label>
-                    <input type="text" id="username" class="signup_text_input" placeholder="Введите имя пользователя" name="username" required>
+                    <label for="username" class="popup_label"><b>Имя пользователя</b><br></label>
+                    <input type="text" id="username" class="popup_text_input" placeholder="Введите имя пользователя" name="username" required>
                 </div>
 
                 <div class="signup_email">
-                    <label for="email" class="signup_label"><b>Email</b><br></label>
-                    <input type="text" id="email" class="signup_text_input" placeholder="Введите e- mail" name="email">
+                    <label for="email" class="popup_label"><b>Email</b><br></label>
+                    <input type="text" id="email" class="popup_text_input" placeholder="Введите e- mail" name="email">
                 </div>
 
                 <div class="signup_password">
-                    <label for="password" class="signup_label"><b>Пароль</b><br></label>
-                    <input type="password" id="password" class="signup_text_input" placeholder="Введите пароль" name="password">
+                    <label for="password" class="popup_label"><b>Пароль</b><br></label>
+                    <input type="password" id="password" class="popup_text_input" placeholder="Введите пароль" name="password">
                 </div>
                 <hr>
                 <div class="signup_full_name" style="display: block;">
-                    <label for="fullname" class="signup_label"><b>ФИО</b><br></label>
-                    <input type="text" id="fullname" class="signup_text_input" placeholder="Введите фамилию, имя и отчество" name="fullname" required>
+                    <label for="fullname" class="popup_label"><b>ФИО</b><br></label>
+                    <input type="text" id="fullname" class="popup_text_input" placeholder="Введите фамилию, имя и отчество" name="fullname" required>
                 </div>
 
                 <div class="signup_position">
-                    <label for="position" class="signup_label"><b>Должность</b><br></label>
-                    <input type="text" id="position" class="signup_text_input" placeholder="Введите должность" name="position" required>
+                    <label for="position" class="popup_label"><b>Должность</b><br></label>
+                    <input type="text" id="position" class="popup_text_input" placeholder="Введите должность" name="position" required>
                 </div>
 
                 <div class="signup_phone">
-                    <label for="phone" class="signup_label"><b>Номер тел.</b><br></label>
-                    <input type="text" id="phone" class="signup_text_input" placeholder="Введите номер тел." name="phone" required>
+                    <label for="phone" class="popup_label"><b>Номер тел.</b><br></label>
+                    <input type="text" id="phone" class="popup_text_input" placeholder="Введите номер тел." name="phone" required>
                 </div>
 
                 <label>
                     <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Подписаться на новости
                 </label>
                 <p style="margin-bottom: 15px;">Отправляя заявку вы соглашаетесь на <a href="#" style="color:dodgerblue">обработку персональных данных</a>.</p>
-                <div class="signup_btn_confirmation">
-                    <button type="button" class="signup_btn_cancel">Отмена</button>
-                    <button type="submit" id="submitBtn" class="signup_btn_submit">Готово</button>
+                <div class="popup_btn_confirmation">
+                    <button type="button" class="popup_btn_cancel">Отмена</button>
+                    <button type="submit" id="submitBtn" class="popup_btn_submit">Готово</button>
                 </div>
             </form>
         </div>
@@ -245,12 +245,13 @@
                                     </div>
                                     <div class="doclist_edit">
                                         <form>
-                                            <button class="toolbar_button" formaction="editing.html">Создать</button>
+                                            <button id="toolbarCreateRecordBtn" class="toolbar_button" formaction="editing.html">Создать</button>
                                         </form>
+                                        <!-- <button id="toolbarCreateRecordBtn" class="toolbar_button"">Создать</button> -->
                                     </div>
                                 </div>
                                 
-                                <table>
+                                <table id="doclist_documents">
                                     <thead>
                                         <th style="width: 15%">Автор</th>
                                         <th style="width: 60%">Заголовок</th>
@@ -270,51 +271,50 @@
 
             <section hidden id="control_section">
                     
-                    <div class="users">
-                        <div class="container">
-                            <div class="users_inner">
-                                <p>▼ Пользователи</p>
-                                <br>
+                <div class="doclist">
+                    <div class="container">
+                        <div class="doclist_inner">
+                            <p>▼ Черновики</p>
+                            <br>
+                            <div class="doclist_wrapper">
 
                                 <div class="doclist_control">
                                     <div class="doclist_selection">
-                                        <button class="toolbar_button">Все пользователи</button>
-                                        <button class="toolbar_button">Удаленные</button>
+                                        <!-- <button class="toolbar_button">Все приказы</button>
+                                        <button class="toolbar_button">Мои приказы</button> -->
                                     </div>
                                     <div class="doclist_edit">
-                                        <button class="toolbar_button">Создать</button>
+                                        <form>
+                                            <button id="toolbarDeleteAllRecordsBtn" class="toolbar_button" formaction="editing.html">Удалить все</button>
+                                        </form>
+                                        <!-- <button id="toolbarCreateRecordBtn" class="toolbar_button"">Создать</button> -->
                                     </div>
                                 </div>
-
-                                <table id="control_users">
+                                
+                                <table id="doclist_draft_documents">
                                     <thead>
-                                        <th>ID</th>
-                                        <th>Имя пользователя</th>
-                                        <th>Почта</th>
-                                        <th>Пароль</th>
-                                        <th>ФИО</th>
-                                        <th>Должность</th>
-                                        <th>Телефон</th>
-                                        <th>Доступ</th>
-                                        <th>Дата регистрации</th>                            
-                                        <th></th>
-                                        <th></th>
+                                        <th style="width: 80%">Заголовок</th>
+                                        <th style="width: 20%">Дата изменения</th>
                                     </thead>
-                                    <tbody>
-                                        <!-- data -->
+                                    <tbody id="doclist_draft_all">
+
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>
+                </div>
         
-                    <div class="analysis">
-                        <div class="container">
-                            <div class="analysis_inner">
-                                <p>▼ Прочее</p>
-                            </div>
+                <div class="analysis">
+                    <div class="container">
+                        <div class="analysis_inner">
+                            <p>▼ Прочее</p>
+                            <br>
+                            <p><a href="administration.html">▼ Администрирование</a></p>
                         </div>
                     </div>
+                </div>
 
             </section>
 

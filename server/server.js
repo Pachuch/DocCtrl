@@ -4,14 +4,17 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const multer = require('multer');
 const uuid = require('uuid').v4;
+const bodyParser = require('body-parser');
+const fs = require('fs');
 
 const app = express();
 dotenv.config();
 const dbService = require('./dbService');
+const { request } = require("express");
  
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false}));
+app.use(express.urlencoded({ extended: true}));
 app.use(session({
   name: "sid",
   resave: false,
@@ -51,7 +54,7 @@ const upload = multer({ storage });
 
 // log in
 app.get('/login', (request, response) => {
-  console.log(request.session);
+  // console.log(request.session);
   request.session.userId = 0;
 
   response.json({
@@ -77,34 +80,97 @@ app.post('/insertUser', (request, response) => {
   request.body.RegistrationDate = new Date();
   request.body.Deleted = false;
   
-  const result = db.insert('Users', request.body);
+  const results = db.insert('User', request.body);
   
-  result.then(data => response.json({ data: data }))
+  results
+  .then(data => response.json({ data: data }))
   .catch(err => console.log(err));
 });
 
-// TODO undone
-app.post('/updateDocument', (request, resonse) => {
+app.post('/insert', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+
+  const { table, ...body} = request.query;
+  const results = db.insert(table, body);
+  
+  results
+  .then(data => response.json({ data: data }))
+  .catch(err => console.log(err));
+});
+
+app.get('/insertDocumentDraft', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+
+  request.body.Validation = 0;
+  request.body.ChangeDate = new Date();
+  request.body.Status = "draft";
+  const results = db.insert('Record', request.body);
+
+  results
+  .then(data => response.json({ data: data }))
+  .catch(err => console.log(err));
+});
+
+app.post('/updateDocument', (request, response) => {
    const db = dbService.getDbServiceInstance();
 
-   console.log('Bang');
-   console.dir(request);
-
-   const result = db.insert('Records', request.body);
-   result
+   const results = db.update(request.query.table, request.query.rowId, request.body);
+   results
    .then(data => response.json({data: data}))
    .catch(err => console.log(err));
 });
 
-app.post('/upload', upload.single('document'), (request, response) => {
-  return response.json({status: "OK "});
+app.post('/upload', upload.single('document_order'), (request, response) => {
+  return response.json({ file: response.req.file });
 });
 
 // read
-app.get('/getUsersTable', (request, response) => {
+app.get('/getTable/:id', (request, response) => {
   const db = dbService.getDbServiceInstance();
-  const results = db.getTableData('Users');
-  results.then(data => response.json({data: data})).catch(err => console.log(err));
+  const results = db.getTableData(request.params.id);
+  results
+  .then(data => response.json({ data: data }))
+  .catch(err => console.log(err));
+});
+
+app.get('/retrieve', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+ 
+  const results = db.retrieve(request.query.table, request.query.rowId);
+
+  results
+  .then(data => response.json({data : data}))
+  .catch(err => console.log(err));
+});
+
+app.get('/getRecordClauses', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+ 
+  const results = db.getRecordClauses(request.query.RecordId);
+
+  results
+  .then(data => response.json({data : data}))
+  .catch(err => console.log(err));
+});
+
+app.get('/getRecordFiles', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+ 
+  const results = db.getRecordFiles(request.query.RecordId);
+
+  results
+  .then(data => response.json({data : data}))
+  .catch(err => console.log(err));
+});
+
+app.get('/getRecordOwners', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+ 
+  const results = db.getRecordOwners(request.query.RecordId);
+
+  results
+  .then(data => response.json({data : data}))
+  .catch(err => console.log(err));
 });
 
 // delete
@@ -113,7 +179,6 @@ app.delete('/delete/:id', (request, response) => {
 
   const info = {
     table: request.body.table,
-    keyName: request.body.keyName,
     id: request.params.id
   };
 
@@ -121,6 +186,29 @@ app.delete('/delete/:id', (request, response) => {
   results
   .then(data => response.json({success: data}))
   .catch(err => console.log(err));
+});
+
+app.delete('/deleteMiddle', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+
+  const results = db.deleteMiddleById(request.query);
+  results
+  .then(data => response.json({success: data}))
+  .catch(err => console.log(err));
+});
+
+app.delete('/deleteRecordFile', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+
+  const path = request.query.fileName;
+
+  try {
+    fs.unlinkSync(path)
+  } catch(err) {
+    console.error(err)
+  }
+
+  return response.json( { status: "OK"} );
 });
 
 app.listen(process.env.PORT, (req, res) => {
