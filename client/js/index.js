@@ -49,7 +49,7 @@ document.getElementsByClassName("header_signup")[0].addEventListener("click", (e
 document.getElementsByClassName("popup_btn_close")[1].addEventListener("click", (evt) => signup_popup.style.display = "none");
 document.getElementsByClassName("popup_btn_cancel")[1].addEventListener("click", (evt) => signup_popup.style.display = "none");
 
-window.onclick = (event) => {
+window.onmousedown = (event) => {
     if(event.target == signup_popup)
         signup_popup.style.display = "none";
     if(event.target == login_popup)
@@ -71,13 +71,14 @@ const funEditRecord = (event) => {
         window.location.href = "editing.html";
     }
     if(event.target.className === 'delete_row_btn') {
-        deleteRowById("Record", event.target.dataset.id);
+        // TODO: deleteRowById("Record", event.target.dataset.id);
     }
 };
 
 // set the elements in the table clickable
-document.querySelector('#doclist_documents tbody').addEventListener('click', funEditRecord);
-document.querySelector('#doclist_draft_documents tbody').addEventListener('click', funEditRecord);
+document.querySelector('#table_records tbody').addEventListener('click', funEditRecord);
+document.querySelector('#table_draft_records tbody').addEventListener('click', funEditRecord);
+document.querySelector('#table_filtered_records tbody').addEventListener('click', funEditRecord);
 
 document.querySelector('#loginBtn').onclick = () => {
     fetch('http://localhost:3001/login')
@@ -130,6 +131,30 @@ document.querySelector('#toolbarCreateRecordBtn').addEventListener('click', (eve
     });
 });
 
+// filtering
+document.querySelector('#filter_btn').onclick = () => {
+    const start_date    = document.querySelector('#filter_start_date').value;
+    const end_date      = document.querySelector('#filter_end_date').value;
+    const is_validated  = document.querySelector('#filter_is_validated').checked;
+
+    const table         = document.querySelector('#table_filtered_records tbody');
+    const section       = document.getElementsByClassName("filtered_docs")[0];
+
+    fetch(`http://localhost:3001/getFiltered/?table=Record&start=${start_date}&end=${end_date}&validated=${is_validated}`)
+    .then(response => response.json())
+    .then(data => loadFilteredRecordTable(table, data['data']));
+
+    section.hidden = false;
+}
+
+document.querySelector('#generate_report_btn').onclick = () => {
+    window.location.href = "report_view.html";
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// functions                                                                   //
+/////////////////////////////////////////////////////////////////////////////////
+
 function deleteRowById(table, id) {
     fetch('http://localhost:3001/delete/' + id, {
         headers: {
@@ -148,9 +173,31 @@ function deleteRowById(table, id) {
     });
 }
 
+function loadStatistics(data) {
+    const count_label = document.querySelector('#count_label');
+
+    let inr = "";
+
+    inr = '▼ Результат&nbsp;&nbsp;';
+    inr += '<div style="color: #666666;">';
+    inr += '(';
+    inr += `Действующие: ${data.actualCount}.&nbsp;`;
+    inr += `Просроченные: ${data.outdatedCount}.&nbsp;`;
+    inr += `Завершенные: ${data.finishedCount}`;
+    inr += ')';
+    inr += '</div>';
+
+    count_label.innerHTML = inr;
+}
+
 function loadRecordTable(data) {
-    const table = document.querySelector('#doclist_documents tbody');
-    const table_draft = document.querySelector('#doclist_draft_documents tbody');
+    const table = document.querySelector('#table_records tbody');
+    const table_draft = document.querySelector('#table_draft_records tbody');
+
+    let actualCount = 0;
+    let outdatedCount = 0;
+    let finishedCount = 0;
+    let validatedCount = 0;
     
     if(!data) {
         table.innerHTML = "<tr><td class='no-data' colspan='6'><div style='margin: 0 auto; text-align: center;'>Error</div></td></tr>";
@@ -170,8 +217,8 @@ function loadRecordTable(data) {
             tableHTML += "<tr>";
             tableHTML += `<td>${UserID}</td>`;
             tableHTML += `<td>${Header}</td>`;
-            tableHTML += `<td>${DocumentDate?.slice(0, 19).replace('T', ' ')}</td>`;
-            tableHTML += `<td>${ChangeDate?.slice(0, 19).replace('T', ' ')}</td>`;
+            tableHTML += `<td>${DocumentDate?.slice(0, 10).replace('T', ' ')}</td>`;
+            tableHTML += `<td>${ChangeDate?.slice(0, 10).replace('T', ' ')}</td>`;
             tableHTML += `<td><button class="edit_row_btn" data-id=${RecordID}>Ред.</td>`;
             tableHTML += `<td><button class="delete_row_btn" data-id=${RecordID}>&times;</td>`;
             tableHTML += "</tr>";
@@ -179,7 +226,7 @@ function loadRecordTable(data) {
         if (Status == "draft") {
             tableHTMLDraft += "<tr>";
             tableHTMLDraft += `<td>${Header}</td>`;
-            tableHTMLDraft += `<td>${ChangeDate?.slice(0, 19).replace('T', ' ')}</td>`;
+            tableHTMLDraft += `<td>${ChangeDate?.slice(0, 10).replace('T', ' ')}</td>`;
             tableHTMLDraft += `<td><button class="edit_row_btn" data-id=${RecordID}>Ред.</td>`;
             tableHTMLDraft += `<td><button class="delete_row_btn" data-id=${RecordID}>&times;</td>`;
             tableHTMLDraft += "</tr>";
@@ -189,4 +236,26 @@ function loadRecordTable(data) {
 
     table.innerHTML = tableHTML;
     table_draft.innerHTML = tableHTMLDraft;
+
+    loadStatistics({ actualCount, outdatedCount, finishedCount, validatedCount });
+}
+
+function loadFilteredRecordTable(table, body) {
+    table.innerHTML = "";
+    let tableRow = ``;
+
+    body.forEach(({RecordID, UserID, Header, DocumentDate, ChangeDate, Status}) => {
+        if (Status == "release") {
+            tableRow += "<tr>";
+            tableRow += `<td>${UserID}</td>`;
+            tableRow += `<td>${Header}</td>`;
+            tableRow += `<td>${DocumentDate?.slice(0, 10).replace('T', ' ')}</td>`;
+            tableRow += `<td>${ChangeDate?.slice(0, 10).replace('T', ' ')}</td>`;
+            tableRow += `<td><button class="edit_row_btn" data-id=${RecordID}>Ред.</td>`;
+            tableRow += `<td><button class="delete_row_btn" data-id=${RecordID}>&times;</td>`;
+            tableRow += "</tr>";
+        }
+    });
+
+    table.innerHTML += tableRow; 
 }

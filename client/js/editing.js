@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /////////////////////////////////////////////////////////////////////////////////
 
 // window listener
-window.onclick = (event) => {
+window.onmousedown = (event) => {
     for (const [key, obj] of Object.entries(popup_window)) {
         if (event.target == obj) {
             obj.style.display = "none";
@@ -419,8 +419,6 @@ function clausesInsertRow(body) {
 
 function filesInsertRow(body) {
     let tableRow = ``;
-
-    console.log(body);
 
     tableRow += "<tr>";
     tableRow += `<td>${body.Name}</td>`;

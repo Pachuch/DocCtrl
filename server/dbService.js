@@ -43,7 +43,32 @@ class dbService {
         try {
             const response = await new Promise((resolve, reject) =>
             {
-                const query = `SELECT * FROM ${table}`;
+                let query = "";
+                query += `SELECT *\n`;
+                query += `FROM ${table}\n`;
+                query += `ORDER BY ${table}ID DESC`;
+
+                connection.query(query, (err, results) => 
+                {
+                    if(err) {
+                        reject(new Error(err.message));
+                    }
+                    resolve(results);
+                });
+            });
+
+            return response;
+
+        } catch(error){
+            console.log(error);
+        }
+    }
+
+    async getFilteredRecords(table, body) {
+        try {
+            const response = await new Promise((resolve, reject) =>
+            {
+                const query = `SELECT * FROM ${table} WHERE DocumentDate > ${body.end} AND Validation = ${body.validated}`;
 
                 connection.query(query, (err, results) => 
                 {

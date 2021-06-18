@@ -133,6 +133,17 @@ app.get('/getTable/:id', (request, response) => {
   .catch(err => console.log(err));
 });
 
+app.get('/getFiltered', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+
+  const { table, ...body} = request.query;
+  const results = db.getFilteredRecords(table, body);
+
+  results
+  .then(data => response.json({ data: data }))
+  .catch(err => console.log(err));
+});
+
 app.get('/retrieve', (request, response) => {
   const db = dbService.getDbServiceInstance();
  

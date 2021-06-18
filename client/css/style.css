@@ -109,6 +109,8 @@ th {
     background: white;
     text-align: left;
     padding: 8px 5px 8px 5px;
+    color:#666666;
+    text-decoration: underline;
 }
 
 tr:nth-child(even) {
@@ -124,14 +126,20 @@ tr:nth-child(odd) {
 
 /* default settings of the sections */
 
-.mytasks_inner {
+.generic_inner {
     padding: 5mm;
 }
 
-.users_inner {
-    padding: 5mm;
+.generic_label {
+    width: 150px;
 }
 
-.filter_inner {
-    padding: 5mm;
+.medium_text_input {
+    width: 30%;
+}
+
+.generic_field {
+    display: flex;
+    justify-content: left;
+    padding-top: 3mm;
 }

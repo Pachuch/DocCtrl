@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="55">
+
+    <title>DocCtrl - Настройки профиля</title>
+
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet"> -->
+    
+    <link rel="stylesheet" type="text/css" href="css/footer.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sidebar.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="css/toolbar.css">
+    <link rel="stylesheet" type="text/css" href="css/account.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header_inner">
+                <div class="header_info">
+                    <a href="index.html" class="header_logo"><img src="res/images/main/rainbow.png" alt="Logo" width="80%" height="auto"></a>
+                    <a href="#">Сайт УГЛТУ</a>
+                </div>
+                <!-- <div class="header_extern">
+                    Links
+                </div> -->
+                <nav class="header_nav">
+                    <form action="#" class="header_search_box">
+                        <!-- <label for="search_input">Search</label> -->
+                        <input type="text" id="search_input" name="search_input">
+                        <input type="submit" value="Поиск">
+                    </form>
+                    
+                    <div class="header_auth">
+                        <a href="#" class="header_login">Войти</a>
+                        <a href="#" class="header_signup">Регистрация</a>
+                    </div>
+
+                    <div class="header_user" style="display: none;">
+                        <a href="#" class="header_user_username">▼ Иванов И. И</a>
+                        <a href="#" class="header_user_logout"> - Выйти</a>
+                    </div>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <div class="container">
+            <div class="toolbar_inner">
+                <div class="toolbar_new_decision">
+                    <button class="toolbar_button">?</button>
+                </div>
+                <div class="toolbar_edit">
+                    <button class="toolbar_button" onclick="history.go(-1)">Назад</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="everything">
+
+        <div id="left_sidebar">
+            <nav role="navigation" class="sidebar_navigation">
+                <ol class="left_sidebar_list">
+                    <li class="sidebar_caption"><img src="res/images/main/home.png" style="padding-right: 16px;" alt="Главная" width="9%" height="auto"><a href="index.html">Главная</a></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div id="content">
+
+            <section id="settings_section">
+
+                <div class="account_details">
+                    <div class="container">
+                        <div class="account_details_inner">
+                            <p>▼ Предпросмотр</p>
+                            <br>
+
+                            <div class="toolbar_inner">
+                                <div class="toolbar_new_decision">
+                                    <button class="toolbar_button">?</button>
+                                </div>
+                                <div class="toolbar_edit">
+                                    <button class="toolbar_button">Скачать PDF</button>
+                                    <button class="toolbar_button">Печать</button>
+                                </div>
+                
+                            </div>
+
+                            <iframe 
+                            src='../sample.pdf' id='myFrame' 
+                                frameborder='0' style='border:0;' 
+                                    width='100%' height='auto'>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+    
+            </section>
+            
+        </div>
+    </div>
+
+</body>
+<script src="js/report_view.js"></script>
+</html>
