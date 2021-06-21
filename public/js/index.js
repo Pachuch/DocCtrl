@@ -36,26 +36,6 @@ for(elem of sidebar_items) {
     elem.myCollection = sidebar_items;
 }
 
-// set the sign in and the sign up links clickable
-const login_popup = document.getElementById("mLoginPopup");
-document.getElementsByClassName("header_login")[0].addEventListener("click", (evt) => login_popup.style.display = "block");
-
-document.getElementsByClassName("popup_btn_close")[0].addEventListener("click", (evt) => login_popup.style.display = "none");
-document.getElementsByClassName("popup_btn_cancel")[0].addEventListener("click", (evt) => login_popup.style.display = "none");
-
-const signup_popup = document.getElementById("mSignUpPopup");
-document.getElementsByClassName("header_signup")[0].addEventListener("click", (evt) => signup_popup.style.display = "block");
-
-document.getElementsByClassName("popup_btn_close")[1].addEventListener("click", (evt) => signup_popup.style.display = "none");
-document.getElementsByClassName("popup_btn_cancel")[1].addEventListener("click", (evt) => signup_popup.style.display = "none");
-
-window.onmousedown = (event) => {
-    if(event.target == signup_popup)
-        signup_popup.style.display = "none";
-    if(event.target == login_popup)
-        login_popup.style.display = "none";
-};
-
 // load the table when the page was loaded
 document.addEventListener('DOMContentLoaded', () => {
     fetch('http://localhost:3001/getTable/Record')
@@ -63,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => loadRecordTable(data['data']));
 
     login();
+    const user = JSON.parse(document.cookie);
+    console.log(user);
 });
 
 const funEditRecord = (event) => {
@@ -81,44 +63,6 @@ const funEditRecord = (event) => {
 document.querySelector('#table_records tbody').addEventListener('click', funEditRecord);
 document.querySelector('#table_draft_records tbody').addEventListener('click', funEditRecord);
 document.querySelector('#table_filtered_records tbody').addEventListener('click', funEditRecord);
-
-document.querySelector('#loginBtn').onclick = () => {
-    fetch('http://localhost:3001/login')
-    .then(response => response.json())
-    .then(data => {
-        if(data) {
-            document.getElementsByClassName("header_auth")[0].style.display = 'none';
-            document.getElementsByClassName("header_user")[0].style.display = 'block';
-        }
-    });
-}
-
-// push data when signing up
-document.querySelector('#registerBtn').onclick = () => {
-    const usernameValue = document.querySelector('#signupUsername').value;
-    const emailValue = document.querySelector('#signupEmail').value;
-    const passwordValue = document.querySelector('#signupPassword').value;
-    const fullnameValue = document.querySelector('#signupFullname').value;
-    const positionValue = document.querySelector('#signupPosition').value;
-    const phoneValue = document.querySelector('#signupPhone').value;
-
-    fetch('http://localhost:3001/insertUser', {
-        headers: {
-            'Content-type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-            Username : usernameValue,
-            Email : emailValue,
-            Password : passwordValue,
-            Fullname : fullnameValue,
-            Position : positionValue,
-            Phone : phoneValue
-        }, null, '\t')
-    })
-    .then(response => response.json())
-    .then(data => insertRowIntoUsersTable(data['data']));
-}
 
 document.querySelector('#toolbarCreateRecordBtn').addEventListener('click', (event) => {
 

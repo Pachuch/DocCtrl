@@ -7,8 +7,8 @@ const router = express.Router();
 const mw = require('../middleware/middleware');
 
 // navigation
-router.get('/', main_controller.index);
-router.get('/home', main_controller.index);
+router.get('/', mw.redirectLogin, main_controller.index);
+router.get('/home', mw.redirectLogin, main_controller.index);
 
 router.get('/account', main_controller.account);
 router.get('/administration', main_controller.administration);
@@ -17,9 +17,10 @@ router.get('/editing', main_controller.editing);
 router.get('/report_view', main_controller.report_view);
 
 // authentication
-router.get('/login', auth_controller.logging);
-router.post('/login', auth_controller.login);
-router.post('/signup', auth_controller.signup);
+router.get('/login', mw.redirectHome, auth_controller.logging);
+router.get('/signup', mw.redirectHome, auth_controller.signingup);
+router.post('/login', mw.redirectHome, auth_controller.login);
+router.post('/signup', mw.redirectHome, auth_controller.signup);
 // router.get('/me', auth_controller, controllers.getMe);
 
 // file streams

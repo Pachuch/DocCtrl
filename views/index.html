@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta http-equiv="refresh" content="59"> -->
 
-    <title>DocCtrl - Welcome</title>
+    <title>Добро пожаловать</title>
 
     <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet"> -->
@@ -40,8 +40,8 @@
                     </form>
                     
                     <div class="header_auth">
-                        <a href="#" class="header_login">Войти</a>
-                        <a href="#" class="header_signup">Регистрация</a>
+                        <a href="/login" class="header_login">Войти</a>
+                        <a href="/signup" class="header_signup">Регистрация</a>
                     </div>
 
                     <div class="header_user" style="display: none;">
@@ -67,136 +67,6 @@
             </div>
         </div>
     </div>
-
-    <!-- sign in popup -->
-    <div id="mLoginPopup" class="popup">
-        <div class="popup_inner">
-            <span class="popup_btn_close" title="Close">&times;</span>
-            <form class="popup_wrapper" action="#">
-                <h1>Вход</h1>
-                <hr>
-                <div class="login_username" style="display: block;">
-                    <label for="loginUsername" class="popup_label"><b>Имя пользователя</b><br></label>
-                    <input type="text" id="loginUsername" class="popup_text_input" placeholder="Введите имя пользователя" name="loginUsername" required>
-                </div>
-
-                <div class="login_password">
-                    <label for="loginPassword" class="popup_label"><b>Пароль</b><br></label>
-                    <input type="password" id="loginPassword" class="popup_text_input" placeholder="Введите пароль" name="loginPassword">
-                </div>
-
-                <label>
-                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Запомнить
-                </label>
-                <div class="popup_btn_confirmation">
-                    <button type="button" class="popup_btn_cancel">Отмена</button>
-                    <button type="submit" id="loginBtn" class="popup_btn_submit">Войти</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-     <!-- sign up popup -->
-    <div id="mSignUpPopup" class="popup">
-        <div class="popup_inner">
-            <span class="popup_btn_close" title="Close">&times;</span>
-            <form class="popup_wrapper" action="#">
-                <h1>Регистрация</h1>
-                <p>Зарегистрируйтесь в системе, чтобы отслеживать ваши действующие приказы</p>
-                <hr>
-
-                <div class="signup_username" style="display: block;">
-                    <label for="signupUsername" class="popup_label"><b>Имя пользователя</b><br></label>
-                    <input type="text" id="signupUsername" class="popup_text_input" placeholder="Введите имя пользователя" name="signupUsername" required>
-                </div>
-
-                <div class="signup_email">
-                    <label for="signupEmail" class="popup_label"><b>Email</b><br></label>
-                    <input type="text" id="signupEmail" class="popup_text_input" placeholder="Введите e- mail" name="signupEmail">
-                </div>
-
-                <div class="signupPassword">
-                    <label for="passsignupPasswordword" class="popup_label"><b>Пароль</b><br></label>
-                    <input type="password" id="signupPassword" class="popup_text_input" placeholder="Введите пароль" name="signupPassword">
-                </div>
-                <hr>
-                <div class="signup_full_name" style="display: block;">
-                    <label for="signupFullname" class="popup_label"><b>ФИО</b><br></label>
-                    <input type="text" id="signupFullname" class="popup_text_input" placeholder="Введите фамилию, имя и отчество" name="signupFullname" required>
-                </div>
-
-                <div class="signup_position">
-                    <label for="signupPosition" class="popup_label"><b>Должность</b><br></label>
-                    <input type="text" id="signupPosition" class="popup_text_input" placeholder="Введите должность" name="signupPosition" required>
-                </div>
-
-                <div class="signup_phone">
-                    <label for="signupPhone" class="popup_label"><b>Номер тел.</b><br></label>
-                    <input type="text" id="signupPhone" class="popup_text_input" placeholder="Введите номер тел." name="signupPhone" required>
-                </div>
-
-                <!-- <label>
-                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Подписаться на новости
-                </label> -->
-                <p style="margin-bottom: 15px;">Отправляя заявку вы соглашаетесь на <a href="#" style="color:dodgerblue">обработку персональных данных</a>.</p>
-                <div class="popup_btn_confirmation">
-                    <button type="button" class="popup_btn_cancel">Отмена</button>
-                    <button type="submit" id="registerBtn" class="popup_btn_submit">Регистрация</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- user edit popup -->
-
-    <!-- <div id="mUserEditPopup" class="popup">
-        <div class="popup_inner">
-            <span class="popup_btn_close" title="Close">&times;</span>
-            <form class="popup_wrapper" action="#">
-                <h1>Редактирование профиля</h1>
-                <hr>
-
-                <div class="signup_username" style="display: block;">
-                    <label for="username" class="popup_label"><b>Имя пользователя</b><br></label>
-                    <input type="text" id="username" class="popup_text_input" placeholder="Введите имя пользователя" name="username" required>
-                </div>
-
-                <div class="signup_email">
-                    <label for="email" class="popup_label"><b>Email</b><br></label>
-                    <input type="text" id="email" class="popup_text_input" placeholder="Введите e- mail" name="email">
-                </div>
-
-                <div class="signup_password">
-                    <label for="password" class="popup_label"><b>Пароль</b><br></label>
-                    <input type="password" id="password" class="popup_text_input" placeholder="Введите пароль" name="password">
-                </div>
-                <hr>
-                <div class="signup_full_name" style="display: block;">
-                    <label for="fullname" class="popup_label"><b>ФИО</b><br></label>
-                    <input type="text" id="fullname" class="popup_text_input" placeholder="Введите фамилию, имя и отчество" name="fullname" required>
-                </div>
-
-                <div class="signup_position">
-                    <label for="position" class="popup_label"><b>Должность</b><br></label>
-                    <input type="text" id="position" class="popup_text_input" placeholder="Введите должность" name="position" required>
-                </div>
-
-                <div class="signup_phone">
-                    <label for="phone" class="popup_label"><b>Номер тел.</b><br></label>
-                    <input type="text" id="phone" class="popup_text_input" placeholder="Введите номер тел." name="phone" required>
-                </div>
-
-                <label>
-                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Подписаться на новости
-                </label>
-                <p style="margin-bottom: 15px;">Отправляя заявку вы соглашаетесь на <a href="#" style="color:dodgerblue">обработку персональных данных</a>.</p>
-                <div class="popup_btn_confirmation">
-                    <button type="button" class="popup_btn_cancel">Отмена</button>
-                    <button type="submit" id="submitBtn" class="popup_btn_submit">Готово</button>
-                </div>
-            </form>
-        </div>
-    </div> -->
 
     <div id="everything">
 

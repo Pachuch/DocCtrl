@@ -1,21 +1,40 @@
+const dbService = require('./db_service');
 
 const rootDir = __dirname.substring(0, __dirname.length - 12);
 
 const logging = (request, response) => {
-    request.session.userId = 0;
+    // request.session.userId = 0;
 
-    response.json({
-        data: request.session.userId ? true : false
-    });
-    // response.sendFile(rootDir + "/views/login.html");
-}
-
-const login = (request, response) => {
+    // response.json({
+    //     data: request.session.userId ? true : false
+    // });
     response.sendFile(rootDir + "/views/login.html");
 }
 
-const signup = (request, response) => {
+const signingup = (request, response) => {
     response.sendFile(rootDir + "/views/register.html");
+}
+
+const login = (request, response) => {
+
+	const db = dbService.getDbServiceInstance();
+
+	const results = db.matchUser(request.body);
+    results
+    .then(data => {
+		const user = data.find(user => user.Email === request.body.Email && user.Password === request.body.Password);
+
+		if (user) {
+			request.session.user = JSON.stringify({ UserID: user.UserID, Username: user.Username});
+			response.redirect('/home');
+		}
+	})
+    .catch(err => console.log(err));
+}
+
+const signup = (request, response) => {
+	console.log(request.body);
+	response.redirect("/home");
 }
 
 // app.get('/', (request, response) => {
@@ -96,6 +115,9 @@ const signup = (request, response) => {
 
 module.exports = {
     logging,
+    signingup,
     login,
     signup
 };
+
+// local middlewares

@@ -3,13 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>DocCtrl - Login</title>
+    <title>Вход в систему</title>
 
     <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet"> -->
     
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="css/popup.css">
 
 </head>
 <body>
@@ -40,6 +41,34 @@
         </div>
     </header>
 
+    <!-- sign in popup -->
+    <div id="mLoginPopup" class="popup" style="display: block;">
+        <div class="popup_inner">
+            <span class="popup_btn_close" title="Close">&times;</span>
+            <form class="popup_wrapper" method="POST" action="/login">
+                <h1>Вход</h1>
+                <hr>
+                <div class="login_email" style="display: block;">
+                    <label for="loginEmail" class="popup_label"><b>E-mail</b><br></label>
+                    <input type="text" id="loginEmail" class="popup_text_input" placeholder="Введите имя пользователя" name="Email" required>
+                </div>
+
+                <div class="login_password">
+                    <label for="loginPassword" class="popup_label"><b>Пароль</b><br></label>
+                    <input type="password" id="loginPassword" class="popup_text_input" placeholder="Введите пароль" name="Password" required>
+                </div>
+
+                <label>
+                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Запомнить
+                </label>
+                <div class="popup_btn_confirmation">
+                    <button type="button" class="popup_btn_cancel">Отмена</button>
+                    <button type="submit" id="loginBtn" class="popup_btn_submit">Войти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="login">
         <div class="container">
             <div class="login_inner">
@@ -48,4 +77,5 @@
         </div>
     </div>
 </body>
+<script src="js/login.js"></script>
 </html>

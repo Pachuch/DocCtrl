@@ -38,6 +38,30 @@ class dbService {
         return instance ? instance : new dbService();
     }
 
+    async matchUser(body) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                let query = "";
+                query += `SELECT *\n`;
+                query += `FROM User\n`;
+                query += `WHERE Email = '${body.Email}' AND Password = '${body.Password}'`;
+
+                connection.query(query, (err, results) => 
+                {
+                    if(err) {
+                        reject(new Error(err.message));
+                    }
+                    resolve(results);
+                });
+            });
+            
+            return response;
+
+        } catch(error){
+            console.log(error);
+        }
+    }
+
     async getTableData(table) {
 
         try {

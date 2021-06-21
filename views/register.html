@@ -3,13 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>DocCtrl - Register</title>
+    <title>Регистрация</title>
 
     <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet"> -->
     
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="css/popup.css">
 
 </head>
 <body>
@@ -39,6 +40,56 @@
             </div>
         </div>
     </header>
+    
+    <div id="mSignUpPopup" class="popup" style="display: block;">
+        <div class="popup_inner">
+            <span class="popup_btn_close" title="Close">&times;</span>
+            <form class="popup_wrapper" method="POST" action="/signup">
+                <h1>Регистрация</h1>
+                <p>Зарегистрируйтесь в системе, чтобы отслеживать ваши действующие приказы</p>
+                <hr>
+
+                <div class="signup_username" style="display: block;">
+                    <label for="signupUsername" class="popup_label"><b>Имя пользователя</b><br></label>
+                    <input type="text" id="signupUsername" class="popup_text_input" placeholder="Введите имя пользователя" name="Username" required>
+                </div>
+
+                <div class="signup_email">
+                    <label for="signupEmail" class="popup_label"><b>Email</b><br></label>
+                    <input type="text" id="signupEmail" class="popup_text_input" placeholder="Введите e- mail" name="Email">
+                </div>
+
+                <div class="signupPassword">
+                    <label for="passsignupPasswordword" class="popup_label"><b>Пароль</b><br></label>
+                    <input type="password" id="signupPassword" class="popup_text_input" placeholder="Введите пароль" name="Password">
+                </div>
+                <hr>
+                <div class="signup_full_name" style="display: block;">
+                    <label for="signupFullname" class="popup_label"><b>ФИО</b><br></label>
+                    <input type="text" id="signupFullname" class="popup_text_input" placeholder="Введите фамилию, имя и отчество" name="Fullname" required>
+                </div>
+
+                <div class="signup_position">
+                    <label for="signupPosition" class="popup_label"><b>Должность</b><br></label>
+                    <input type="text" id="signupPosition" class="popup_text_input" placeholder="Введите должность" name="Position" required>
+                </div>
+
+                <div class="signup_phone">
+                    <label for="signupPhone" class="popup_label"><b>Номер тел.</b><br></label>
+                    <input type="text" id="signupPhone" class="popup_text_input" placeholder="Введите номер тел." name="Phone" required>
+                </div>
+
+                <!-- <label>
+                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Подписаться на новости
+                </label> -->
+                <p style="margin-bottom: 15px;">Отправляя заявку вы соглашаетесь на <a href="#" style="color:dodgerblue">обработку персональных данных</a>.</p>
+                <div class="popup_btn_confirmation">
+                    <button type="button" class="popup_btn_cancel">Отмена</button>
+                    <button type="submit" id="registerBtn" class="popup_btn_submit">Регистрация</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="register">
         <div class="container">
@@ -48,4 +99,5 @@
         </div>
     </div>
 </body>
+<script src="js/register.js"></script>
 </html>

@@ -1,14 +1,6 @@
 const uuid = require('uuid').v4;
 const multer = require('multer');
 
-const auth_middle = (request, response, next) => {
-    const { userId } = request.session;
-    if (userId) {
-        response.locals.user = users.find(user => user.id === userId);
-    }
-    next();
-};
-
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, 'uploads');
@@ -22,7 +14,20 @@ const storage = multer.diskStorage({
   
 const upload_mw = multer({ storage });
 
+const redirectHome = (request, response, next) => {
+  if (request.session.user) {
+    response.redirect('/');
+  } else { next(); }
+}
+
+const redirectLogin = (request, response, next) => {
+  if(!request.session.user) {
+    response.redirect('/login');
+  } else { next(); }
+};
+
 module.exports = {
-    auth_middle,
-    upload_mw
+    upload_mw,
+    redirectHome,
+    redirectLogin
 };
