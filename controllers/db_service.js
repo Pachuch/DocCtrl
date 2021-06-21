@@ -180,12 +180,10 @@ class dbService {
 
     async deleteRowById(info) {
         let id = parseInt(info.id, 10);
-
         try {
             const response = await new Promise((resolve, reject) =>
             {
                 const query = `DELETE FROM ${info.table} WHERE ${info.table}ID = ?`;
-    
                 connection.query(query, [id], (err, result) => 
                 {
                     if(err) reject(new Error(err.message));

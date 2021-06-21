@@ -2,9 +2,6 @@ const express = require("express");
 const session = require("express-session");
 const cors = require('cors');
 const dotenv = require('dotenv');
-const multer = require('multer');
-const uuid = require('uuid').v4;
-const fs = require('fs');
 
 const app = express();
 dotenv.config();
@@ -42,35 +39,35 @@ const redirectLogin = (request, response, next) => {
   } else { next(); }
 };
 
-const storage = multer.diskStorage({
+// const storage = multer.diskStorage({
 
-  destination: (req, file, cb) => {
-    cb(null, 'uploads');
-  },
+//   destination: (req, file, cb) => {
+//     cb(null, 'uploads');
+//   },
 
-  filename: (req, file, cb) => {
-    const {originalname} = file;
-    cb(null, `${uuid()}-${originalname}`);
-  }
-});
+//   filename: (req, file, cb) => {
+//     const {originalname} = file;
+//     cb(null, `${uuid()}-${originalname}`);
+//   }
+// });
 
-const upload = multer({ storage });
+// const upload = multer({ storage });
 
-app.post('/upload', upload.single('document_order'), (request, response) => {
-  return response.json({ file: response.req.file });
-});
+// app.post('/upload', upload.single('document_order'), (request, response) => {
+//   return response.json({ file: response.req.file });
+// });
 
-app.delete('/deleteRecordFile', (request, response) => {
-  const path = request.query.fileName;
+// app.delete('/deleteRecordFile', (request, response) => {
+//   const path = request.query.fileName;
 
-  try {
-    fs.unlinkSync(path)
-  } catch(err) {
-    console.error(err)
-  }
+//   try {
+//     fs.unlinkSync(path)
+//   } catch(err) {
+//     console.error(err)
+//   }
 
-  return response.json( { status: "OK"} );
-});
+//   return response.json( { status: "OK"} );
+// });
 
 app.listen(process.env.PORT, (req, res) => {
   console.log("Server running...");

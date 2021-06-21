@@ -16,6 +16,6 @@ router.post('/insertUser', db_controller.insert_user);
 router.post('/updateDocument', db_controller.update_document);
 
 router.delete('/delete/:id', db_controller.delete_by_id);
-router.post('/deleteMiddle', db_controller.delete_middle);
+router.delete('/deleteMiddle', db_controller.delete_middle);
 
 module.exports = router;
