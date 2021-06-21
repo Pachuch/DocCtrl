@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('http://localhost:3001/getTable/Record')
     .then(response => response.json())
     .then(data => loadRecordTable(data['data']));
+
+    login();
 });
 
 const funEditRecord = (event) => {
@@ -71,7 +73,7 @@ const funEditRecord = (event) => {
         window.location.href = "editing.html";
     }
     if(event.target.className === 'delete_row_btn') {
-        // TODO: deleteRowById("Record", event.target.dataset.id);
+        deleteRowById("Record", event.target.dataset.id);
     }
 };
 
@@ -211,14 +213,14 @@ function loadRecordTable(data) {
     
     let tableHTML = "";
     let tableHTMLDraft = "";
-    data.forEach(({RecordID, UserID, Header, DocumentDate, ChangeDate, Status}) => {
+    data.forEach(({RecordID, UserFullName, Header, EndDate, ChangeDate, Status}) => {
 
         if (Status == "release") {
             tableHTML += "<tr>";
-            tableHTML += `<td>${UserID}</td>`;
+            tableHTML += `<td>${UserFullName}</td>`;
             tableHTML += `<td>${Header}</td>`;
-            tableHTML += `<td>${DocumentDate?.slice(0, 10).replace('T', ' ')}</td>`;
-            tableHTML += `<td>${ChangeDate?.slice(0, 10).replace('T', ' ')}</td>`;
+            tableHTML += `<td>${getExpiration(EndDate?.slice(0, 10))}</td>`;
+            tableHTML += `<td>${ChangeDate?.slice(0, 10)}</td>`;
             tableHTML += `<td><button class="edit_row_btn" data-id=${RecordID}>Ред.</td>`;
             tableHTML += `<td><button class="delete_row_btn" data-id=${RecordID}>&times;</td>`;
             tableHTML += "</tr>";
@@ -244,13 +246,13 @@ function loadFilteredRecordTable(table, body) {
     table.innerHTML = "";
     let tableRow = ``;
 
-    body.forEach(({RecordID, UserID, Header, DocumentDate, ChangeDate, Status}) => {
+    body.forEach(({RecordID, UserFullName, Header, EndDate, ChangeDate, Status}) => {
         if (Status == "release") {
             tableRow += "<tr>";
-            tableRow += `<td>${UserID}</td>`;
+            tableRow += `<td>${UserFullName}</td>`;
             tableRow += `<td>${Header}</td>`;
-            tableRow += `<td>${DocumentDate?.slice(0, 10).replace('T', ' ')}</td>`;
-            tableRow += `<td>${ChangeDate?.slice(0, 10).replace('T', ' ')}</td>`;
+            tableRow += `<td>${getExpiration(EndDate?.slice(0, 10))}</td>`;
+            tableRow += `<td>${ChangeDate?.slice(0, 10)}</td>`;
             tableRow += `<td><button class="edit_row_btn" data-id=${RecordID}>Ред.</td>`;
             tableRow += `<td><button class="delete_row_btn" data-id=${RecordID}>&times;</td>`;
             tableRow += "</tr>";
@@ -258,4 +260,33 @@ function loadFilteredRecordTable(table, body) {
     });
 
     table.innerHTML += tableRow; 
+}
+
+function getExpiration(date) {
+
+    if (!date)
+        return "Нет данных";
+    
+    const date1 = new Date();
+    const date2 = new Date(date);
+
+    // One day in milliseconds
+    const oneDay = 1000 * 60 * 60 * 24;
+
+    // Calculating the time difference between two dates
+    const diffInTime = date2.getTime() - date1.getTime();
+
+    // Calculating the no. of days between two dates
+    const diffInDays = Math.round(diffInTime / oneDay);
+
+    return diffInDays;
+}
+
+function login() {
+    fetch('http://localhost:3001/getUser/?username=admin')
+    .then(response => response.json())
+    .then(body => {
+        localStorage.setItem("iCurrentUserID", body['data'][0].UserID);  // TODO: hook to current user id
+        localStorage.setItem("sCurrentUserFullName", body['data'][0].Fullname);
+    });
 }

@@ -68,11 +68,29 @@ function loadUsersTable(data) {
         tableHTML += `<td>${Position}</td>`;
         tableHTML += `<td>${Phone}</td>`;
         tableHTML += `<td>${Access}</td>`;
-        tableHTML += `<td>${RegistrationDate}</td>`;
+        tableHTML += `<td>${RegistrationDate.slice(0, 10)}</td>`;
         tableHTML += `<td><button class="edit_row_btn" data-id=${UserID}>Ред.</td>`;
         tableHTML += `<td><button class="delete_row_btn" data-id=${UserID}>&times;</td>`;
         tableHTML += "</tr>";
     });
 
     table.innerHTML = tableHTML;
+}
+
+function deleteRowById(table, id) {
+    fetch('http://localhost:3001/delete/' + id, {
+        headers: {
+            'Content-type': 'application/json'
+        },
+        method: 'DELETE',
+        body: JSON.stringify({
+            table : table
+        }, null, '\t')
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            location.reload();
+        }
+    });
 }

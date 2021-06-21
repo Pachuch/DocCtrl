@@ -41,8 +41,7 @@ class dbService {
     async getTableData(table) {
 
         try {
-            const response = await new Promise((resolve, reject) =>
-            {
+            const response = await new Promise((resolve, reject) => {
                 let query = "";
                 query += `SELECT *\n`;
                 query += `FROM ${table}\n`;
@@ -68,7 +67,17 @@ class dbService {
         try {
             const response = await new Promise((resolve, reject) =>
             {
-                const query = `SELECT * FROM ${table} WHERE DocumentDate > ${body.end} AND Validation = ${body.validated}`;
+                // const query = `SELECT * FROM ${table} WHERE Validation = ${body.validated} AND DATE(DocumentDate) BETWEEN ${body.start} AND ${body.end}`;
+
+                let query = ``;
+                query += `SELECT *\n`;
+                query += `FROM ${table}\n`;
+                // query += `WHERE Validation = ${body.validated} AND\n`;
+                query += `WHERE DATE(EndDate) BETWEEN\n`;
+                query += `'${body.start}' AND\n`;
+                query += `'${body.end}'`;
+
+                console.log(query);
 
                 connection.query(query, (err, results) => 
                 {
@@ -82,6 +91,25 @@ class dbService {
             return response;
 
         } catch(error){
+            console.log(error);
+        }
+    }
+
+    async getUser(username) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = `SELECT * FROM User WHERE Username = '${username}'`
+                connection.query(query, (err, results) => {
+                    if(err) {
+                        reject(new Error(err.message));
+                    }
+                    resolve(results);
+                });
+            });
+
+            return response;
+
+        }catch(error){
             console.log(error);
         }
     }
@@ -121,7 +149,7 @@ class dbService {
                     resolve(Object.assign({insertId : record_id}, body));
                 });
             });
-            
+
             return body;
 
         } catch(error) {
@@ -245,7 +273,7 @@ class dbService {
         try {
             const response = await new Promise((resolve, reject) =>
             {
-                const query = `SELECT UserID, Fullname, Position FROM User WHERE UserID IN (SELECT UserID FROM RecordOwner WHERE RecordID = ${RecordId})`
+                const query = `SELECT UserID, Fullname, Email, Position FROM User WHERE UserID IN (SELECT UserID FROM RecordOwner WHERE RecordID = ${RecordId})`
 
                 connection.query(query, (err, results) => 
                 {

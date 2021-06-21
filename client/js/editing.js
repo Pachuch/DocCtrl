@@ -2,6 +2,7 @@
 
 const doc_idx = localStorage.getItem("iCurrentDocumentIndex");
 var clauseCounter = 0;
+var endDate = "";
 var temporary;
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +67,8 @@ const table = {
 // load the table when the page was loaded
 document.addEventListener('DOMContentLoaded', () => {
 
+    text_field.date.value = new Date().toJSON().slice(0, 10);
+
     // TODO load page with data
 
     if (localStorage.getItem("bCreateNewRecord") === "false") {
@@ -78,7 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             text_field.number.value = data.data[0].Number;
-            text_field.date.value = data.data[0].DocumentDate?.slice(0, 19).replace('T', ' ');
+            text_field.date.value = data.data[0].DocumentDate?.slice(0, 10);
+            if (data.data[0].EndDate)
+                endDate = data.data[0].EndDate.slice(0, 10);
             text_field.access_stamp.value = data.data[0].AccessStamp;
             text_field.head.value = data.data[0].Header;
             text_field.basis.value = data.data[0].Basis;
@@ -88,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loadOwnerTable();
         });
     }
+    
 });
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -138,8 +144,8 @@ popup_button.add_clause.onclick = () => {
     finish_clause_btn.innerHTML = "Создать";
     clause_text_fields.body.value = "";
     clause_text_fields.performers.value = "";
-    clause_text_fields.expirationdate.value = "1999-12-31";
-    popup_window.add_clause.style.display = 'block';
+    clause_text_fields.expirationdate.value = new Date().toJSON().slice(0, 10);
+    popup_window.add_clause.style.display = 'block';    
 }
 
 // submit clause to the server
@@ -194,6 +200,12 @@ finish_clause_btn.onclick = () => {
         .then(() => location.reload());
     }
 
+    if (endDate.length === 0 || (Date.parse(newRow.ExpirationDate) > Date.parse(endDate))) {
+        console.log(newRow.ExpirationDate, " > ", endDate);
+        endDate = newRow.ExpirationDate;
+    }
+
+    updateDocument("draft");
     popup_window.add_clause.style.display = 'none';
 }
 
@@ -388,13 +400,15 @@ function updateDocument(status) {
         },
         method: 'POST',
         body: JSON.stringify({
-            UserID          : 2, // TODO: hook to current user id
+            UserID          : localStorage.getItem("iCurrentUserID"),
+            UserFullName    : localStorage.getItem("sCurrentUserFullName"),
             Number          : document.querySelector('#number')?.value,
             Header          : document.querySelector('#head')?.value,
             Basis           : document.querySelector('#basis')?.value,
             AccessStamp     : document.querySelector('#accessStamp')?.value,
             Validation      : 0,
-            DocumentDate    : document.querySelector('#date').value?.slice(0, 19).replace('T', ' '),
+            DocumentDate    : document.querySelector('#date').value?.slice(0, 10),
+            EndDate         : endDate.length > 0 ? endDate : null,
             ChangeDate      : new Date().toISOString().slice(0, 19).replace('T', ' '),
             Status          : status
         }, null, '\t')
@@ -406,10 +420,16 @@ function updateDocument(status) {
 function clausesInsertRow(body) {
     let tableRow = ``;
 
+    let incomeDate = Date.parse(body.ExpirationDate);
+    let dateHighlight = `#008800`;
+    if (incomeDate < new Date()) {
+        dateHighlight = `#ff0000`;
+    }
+
     tableRow += "<tr>";
     tableRow += `<td>${body.Number}</td>`;
     tableRow += `<td>${body.Body}</td>`;
-    tableRow += `<td>${body.ExpirationDate?.slice(0, 10).replace('T', ' ')}</td>`;
+    tableRow += `<td><div style="color: ${dateHighlight}">${body.ExpirationDate?.slice(0, 10)}</div></td>`;
     tableRow += `<td><button class="edit_row_btn" data-id=${body.ClauseID}>Ред.</td>`;
     tableRow += `<td><button class="delete_row_btn" data-id=${body.ClauseID}>&times;</td>`;
     tableRow += "</tr>";
@@ -433,6 +453,7 @@ function ownersInsertRow(body) {
 
     tableRow += "<tr>";
     tableRow += `<td>${body.Fullname}</td>`;
+    tableRow += `<td>${body.Email}</td>`;
     tableRow += `<td>${body.Position}</td>`;
     tableRow += `<td><button class="delete_row_btn" data-id=${body.UserID}>&times;</td>`;
     tableRow += "</tr>";
@@ -458,6 +479,7 @@ function loadClauseTable() {
     .then(response => response.json())
     .then(data => {
         if (data.data[0]) {
+            clauseCounter = data.data.length;
             for (row of data.data)
                 clausesInsertRow(row);
         }

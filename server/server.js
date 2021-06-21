@@ -144,6 +144,16 @@ app.get('/getFiltered', (request, response) => {
   .catch(err => console.log(err));
 });
 
+app.get('/getUser', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+ 
+  const results = db.getUser(request.query.username);
+
+  results
+  .then(data => response.json({data : data}))
+  .catch(err => console.log(err));
+});
+
 app.get('/retrieve', (request, response) => {
   const db = dbService.getDbServiceInstance();
  
