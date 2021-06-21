@@ -134,7 +134,7 @@ for (editCtrl of Object.values(text_field)) {
 document.querySelector('#doneBtn').onclick = () => {
     //TODO: checks if the document was not filled completely
     updateDocument("release");
-    window.location.href = "index.html";
+    window.location.href = "home";
 }
 
 // !insertion buttons!

@@ -77,8 +77,6 @@ class dbService {
                 query += `'${body.start}' AND\n`;
                 query += `'${body.end}'`;
 
-                console.log(query);
-
                 connection.query(query, (err, results) => 
                 {
                     if(err) {

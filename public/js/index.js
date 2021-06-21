@@ -70,7 +70,7 @@ const funEditRecord = (event) => {
         localStorage.setItem("iCurrentDocumentIndex", event.target.dataset.id);
         localStorage.setItem("sCurrentDocumentStatus", "draft");
         localStorage.setItem("bCreateNewRecord", "false");
-        window.location.href = "editing.html";
+        window.location.href = "editing";
     }
     if(event.target.className === 'delete_row_btn') {
         deleteRowById("Record", event.target.dataset.id);
@@ -150,7 +150,7 @@ document.querySelector('#filter_btn').onclick = () => {
 }
 
 document.querySelector('#generate_report_btn').onclick = () => {
-    window.location.href = "report_view.html";
+    window.location.href = "report_view";
 }
 
 /////////////////////////////////////////////////////////////////////////////////

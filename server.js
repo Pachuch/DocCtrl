@@ -4,13 +4,13 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const multer = require('multer');
 const uuid = require('uuid').v4;
-const bodyParser = require('body-parser');
 const fs = require('fs');
+
+const mainRouter = require('./routes/main_routes');
 
 const app = express();
 dotenv.config();
 const dbService = require('./dbService');
-const { request } = require("express");
  
 app.use(cors());
 app.use(express.json());
@@ -24,16 +24,21 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 2,
     sameSite: true,
     secure: true
-  }
+  } 
 }));
-app.use(express.static('public'));
+app.use(express.static(__dirname + "/public"));
+app.use(mainRouter);
+
+const redirectHome = (request, response, next) => {
+  if (!request.session.userId) {
+    response.redirect('/');
+  } else { next(); }
+}
 
 const redirectLogin = (request, response, next) => {
   if(!request.session.userId) {
     response.redirect('/login');
-  } else {
-    next();
-  }
+  } else { next(); }
 };
 
 const storage = multer.diskStorage({
@@ -53,6 +58,14 @@ const upload = multer({ storage });
 // routes
 
 // log in
+
+app.get('/', (request, response) => {
+  // const user = users.find(user => user.id === request.session.userId);
+  console.log(request.session);
+
+  response.sendFile(__dirname + "/views/index.html");
+});
+
 app.get('/login', (request, response) => {
   // console.log(request.session);
   request.session.userId = 0;
@@ -62,14 +75,66 @@ app.get('/login', (request, response) => {
   });
 });
 
+// const users = [
+//   { id: 1, name: 'Alex', email: "aaa@gmail.com", password: "sercret" },
+//   { id: 2, name: 'Brian', email: "bbb@gmail.com", password: "sercret" },
+//   { id: 3, name: 'Mia', email: "ccc@gmail.com", password: "sercret" }
+// ];
+
+app.post('/login', redirectHome, (request, response) => {
+  const { email, password } = request.body;
+
+  if (email && password) {
+    const user = users.find(user => user.email === email && user.password === password);
+    if (user) {
+      request.session.userId = user.id;
+      return response.redirect('/');
+    }
+  }
+
+  response.redirect('/login');
+
+});
+
+app.post('/register', redirectHome, (request, response) => {
+  const { name, email, passwird } = request.body;
+
+  if (name && email && password) {
+    const exists = users.some(user => user.email);
+
+    if (!exists) {
+      const user = {
+        id: users.length + 1,
+        name,
+        email,
+        password
+      }
+
+      users.push(user);
+
+      request.session.userId = user.id;
+      return response.redirect('/');
+    }
+  }
+
+  response.redirect('/register');
+});
+
 // sign in
 app.get('/register', (request, response) => {
-
+  return response.json( {status: "BAD" });
 });
 
 // log out
 app.post('/logout', (request, response) => {
+  request.session.destroy(err => {
+    if (err) {
+      return response.redirect('/');
+    }
 
+    response.clearCookie("sid");
+    response.redirect('/login');
+  })
 });
 
 // create
