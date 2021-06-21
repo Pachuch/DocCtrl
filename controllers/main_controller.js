@@ -8,6 +8,12 @@
 
 const rootDir = __dirname.substring(0, __dirname.length - 12);
 
+const index = (request, response) => {
+    // const user = users.find(user => user.id === request.session.userId);
+
+    response.sendFile(rootDir + "/views/index.html");
+}
+
 const account = (request, response) => {
     response.sendFile(rootDir + "/views/account.html");
 }
@@ -24,18 +30,6 @@ const editing = (request, response) => {
     response.sendFile(rootDir + "/views/editing.html");
 }
 
-const index = (request, response) => {
-    response.sendFile(rootDir + "/views/index.html");
-}
-
-const login = (request, response) => {
-    response.sendFile(rootDir + "/views/login.html");
-}
-
-const register = (request, response) => {
-    response.sendFile(rootDir + "/views/register.html");
-}
-
 const report_view = (request, response) => {
     response.sendFile(rootDir + "/views/report_view.html");
 }
@@ -46,7 +40,5 @@ module.exports = {
     docview,
     editing,
     index,
-    login,
-    register,
     report_view
 };
