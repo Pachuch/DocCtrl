@@ -24,6 +24,13 @@ a {
     text-decoration: none;
 }
 
+select {
+    width: 25%;
+    border: 1px solid #888888;
+    border-radius: 5px;
+    border: opacity 1px;
+}
+
 #everything {
     display: flex;
     justify-content: space-between;

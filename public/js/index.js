@@ -38,19 +38,57 @@ for(elem of sidebar_items) {
 
 // load the table when the page was loaded
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:3001/getTable/Record')
+    fetch('/getTable/Record')
     .then(response => response.json())
     .then(data => loadRecordTable(data['data']));
+    
+    if (!document.cookie)
+        window.location.href = "/logout";
 
-    login();
-    const user = JSON.parse(document.cookie);
-    console.log(user);
+    localStorage.setItem("bCreateNewRecord", "true");
+
+    const userData = document.cookie.split("; ").reduce((a, c) => {
+        let [n, v] = c.split("=");
+        return {
+            ...a,[n]:decodeURIComponent(v)
+        };
+    }, {});
+
+    const {
+        UserID,
+        Username,
+        Email,
+        Fullname,
+        Position,
+        Phone,
+        RegistrationDate
+    } = JSON.parse(userData['user']);
+
+    const headerAuth = document.querySelector('#headerAuth');
+    const headerUser = document.querySelector('#headerUser');
+    const headerUserUsername = document.querySelector('#headerUserUsername');
+
+    if (Username) {
+        headerAuth.hidden = true;
+        headerUser.hidden = false;
+        headerUserUsername.innerHTML = "▼ " + Username;
+
+        localStorage.setItem("iCurrentUserID", UserID);
+        localStorage.setItem("sCurrentUsername", Username);
+        localStorage.setItem("sCurrentEmail", Email);
+        localStorage.setItem("sCurrentUserFullName", Fullname);
+        localStorage.setItem("sCurrentUserPosition", Position);
+        localStorage.setItem("sCurrentUserPhone", Phone);
+        localStorage.setItem("sCurrentUserRegDate", RegistrationDate);
+    } else {
+        window.location.href = "/logout";
+    }
 });
 
 const funEditRecord = (event) => {
     if(event.target.className === 'edit_row_btn') {
         localStorage.setItem("iCurrentDocumentIndex", event.target.dataset.id);
-        localStorage.setItem("sCurrentDocumentStatus", "draft");
+        localStorage.setItem("sCurrentDocumentStatus", "Проект");
         localStorage.setItem("bCreateNewRecord", "false");
         window.location.href = "editing";
     }
@@ -66,9 +104,11 @@ document.querySelector('#table_filtered_records tbody').addEventListener('click'
 
 document.querySelector('#toolbarCreateRecordBtn').addEventListener('click', (event) => {
 
-    // TODO new record insertion
+    if (!document.cookie) {
+        window.location.href = "/logout";
+    }
 
-    fetch('http://localhost:3001/insertDocumentDraft')
+    fetch('/insertDocumentDraft')
     .then(response => response.json())
     .then(data => {
         localStorage.setItem("iCurrentDocumentIndex", data.data.insertId);
@@ -81,12 +121,17 @@ document.querySelector('#toolbarCreateRecordBtn').addEventListener('click', (eve
 document.querySelector('#filter_btn').onclick = () => {
     const start_date    = document.querySelector('#filter_start_date').value;
     const end_date      = document.querySelector('#filter_end_date').value;
-    const is_validated  = document.querySelector('#filter_is_validated').checked;
+    const actual        = document.querySelector('#filter_is_actual').checked;
+    const outdated      = document.querySelector('#filter_is_outdated').checked;
+    const category      = document.querySelector('#category').value;
+    const kind          = document.querySelector('#kind').value;
+    const status        = document.querySelector('#status').value;
+
 
     const table         = document.querySelector('#table_filtered_records tbody');
     const section       = document.getElementsByClassName("filtered_docs")[0];
 
-    fetch(`http://localhost:3001/getFiltered/?table=Record&start=${start_date}&end=${end_date}&validated=${is_validated}`)
+    fetch(`/getFiltered/?table=Record&start=${start_date}&end=${end_date}&isactual=${actual}&isoutdated=${outdated}&category=${category}&kind=${kind}&status=${status}`)
     .then(response => response.json())
     .then(data => loadFilteredRecordTable(table, data['data']));
 
@@ -102,7 +147,7 @@ document.querySelector('#generate_report_btn').onclick = () => {
 /////////////////////////////////////////////////////////////////////////////////
 
 function deleteRowById(table, id) {
-    fetch('http://localhost:3001/delete/' + id, {
+    fetch('/delete/' + id, {
         headers: {
             'Content-type': 'application/json'
         },
@@ -140,40 +185,32 @@ function loadRecordTable(data) {
     const table = document.querySelector('#table_records tbody');
     const table_draft = document.querySelector('#table_draft_records tbody');
 
-    let actualCount = 0;
-    let outdatedCount = 0;
-    let finishedCount = 0;
-    let validatedCount = 0;
-    
-    if(!data) {
-        table.innerHTML = "<tr><td class='no-data' colspan='6'><div style='margin: 0 auto; text-align: center;'>Error</div></td></tr>";
-        return;
-    }
-
     if(data.length === 0) {
-        table.innerHTML = "<tr><td class='no-data' colspan='6'><div style='margin: 0 auto; text-align: center;'>No Data</div></td></tr>";
+        table.innerHTML = "<tr><td class='no-data' colspan='7'><div style='margin: 0 auto; text-align: center;'>Нет записей</div></td></tr>";
+        table_draft.innerHTML = "<tr><td class='no-data' colspan='4'><div style='margin: 0 auto; text-align: center;'>Нет записей</div></td></tr>";
         return;
     }
     
     let tableHTML = "";
     let tableHTMLDraft = "";
-    data.forEach(({RecordID, UserFullName, Header, EndDate, ChangeDate, Status}) => {
+    data.forEach(({RecordID, Performer, Number, Header, DocumentDate, ChangeDate, Status}) => {
 
-        if (Status == "release") {
+        if (Status != "Проект") {
             tableHTML += "<tr>";
-            tableHTML += `<td>${UserFullName}</td>`;
+            tableHTML += `<td>${Performer}</td>`;
             tableHTML += `<td>${Header}</td>`;
-            tableHTML += `<td>${getExpiration(EndDate?.slice(0, 10))}</td>`;
-            tableHTML += `<td>${ChangeDate?.slice(0, 10)}</td>`;
-            tableHTML += `<td><button class="edit_row_btn" data-id=${RecordID}>Ред.</td>`;
+            tableHTML += `<td>${Status}</td>`;
+            tableHTML += `<td>${Number}</td>`;
+            tableHTML += `<td>${DocumentDate.slice(0, 10)}</td>`;
+            tableHTML += `<td><button class="edit_row_btn" data-id=${RecordID}>Откр.</td>`;
             tableHTML += `<td><button class="delete_row_btn" data-id=${RecordID}>&times;</td>`;
             tableHTML += "</tr>";
         }
-        if (Status == "draft") {
+        if (Status == "Проект") {
             tableHTMLDraft += "<tr>";
             tableHTMLDraft += `<td>${Header}</td>`;
             tableHTMLDraft += `<td>${ChangeDate?.slice(0, 10).replace('T', ' ')}</td>`;
-            tableHTMLDraft += `<td><button class="edit_row_btn" data-id=${RecordID}>Ред.</td>`;
+            tableHTMLDraft += `<td><button class="edit_row_btn" data-id=${RecordID}>Откр.</td>`;
             tableHTMLDraft += `<td><button class="delete_row_btn" data-id=${RecordID}>&times;</td>`;
             tableHTMLDraft += "</tr>";
         }
@@ -183,54 +220,33 @@ function loadRecordTable(data) {
     table.innerHTML = tableHTML;
     table_draft.innerHTML = tableHTMLDraft;
 
-    loadStatistics({ actualCount, outdatedCount, finishedCount, validatedCount });
+    // loadStatistics({ actualCount, outdatedCount, finishedCount, validatedCount });
 }
 
 function loadFilteredRecordTable(table, body) {
+    
+    if(body.length === 0) {
+        table.innerHTML = "<tr><td class='no-data' colspan='7'><div style='margin: 0 auto; text-align: center;'>Нет записей</div></td></tr>";
+        return;
+    }
+
     table.innerHTML = "";
     let tableRow = ``;
-
-    body.forEach(({RecordID, UserFullName, Header, EndDate, ChangeDate, Status}) => {
-        if (Status == "release") {
-            tableRow += "<tr>";
-            tableRow += `<td>${UserFullName}</td>`;
-            tableRow += `<td>${Header}</td>`;
-            tableRow += `<td>${getExpiration(EndDate?.slice(0, 10))}</td>`;
-            tableRow += `<td>${ChangeDate?.slice(0, 10)}</td>`;
-            tableRow += `<td><button class="edit_row_btn" data-id=${RecordID}>Ред.</td>`;
-            tableRow += `<td><button class="delete_row_btn" data-id=${RecordID}>&times;</td>`;
-            tableRow += "</tr>";
-        }
+    body.forEach(({RecordID, Performer, Number, Header, DocumentDate, Status}) => {
+        tableRow += "<tr>";
+        tableRow += `<td>${Performer}</td>`;
+        tableRow += `<td>${Header}</td>`;
+        tableRow += `<td>${Status}</td>`;
+        tableRow += `<td>${Number}</td>`;
+        tableRow += `<td>${DocumentDate.slice(0, 10)}</td>`;
+        tableRow += `<td><button class="edit_row_btn" data-id=${RecordID}>Откр.</td>`;
+        tableRow += `<td><button class="delete_row_btn" data-id=${RecordID}>&times;</td>`;
+        tableRow += "</tr>";
     });
 
     table.innerHTML += tableRow; 
 }
 
-function getExpiration(date) {
-
-    if (!date)
-        return "Нет данных";
-    
-    const date1 = new Date();
-    const date2 = new Date(date);
-
-    // One day in milliseconds
-    const oneDay = 1000 * 60 * 60 * 24;
-
-    // Calculating the time difference between two dates
-    const diffInTime = date2.getTime() - date1.getTime();
-
-    // Calculating the no. of days between two dates
-    const diffInDays = Math.round(diffInTime / oneDay);
-
-    return diffInDays;
-}
-
-function login() {
-    fetch('http://localhost:3001/getUser/?username=admin')
-    .then(response => response.json())
-    .then(body => {
-        localStorage.setItem("iCurrentUserID", body['data'][0].UserID);  // TODO: hook to current user id
-        localStorage.setItem("sCurrentUserFullName", body['data'][0].Fullname);
-    });
-}
+const getCookieValue = (name) => (
+    document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
+)

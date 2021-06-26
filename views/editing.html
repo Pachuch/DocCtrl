@@ -34,14 +34,9 @@
                         <input type="submit" value="Поиск">
                     </form>
                     
-                    <div class="header_auth">
-                        <a href="/" class="header_login">Войти</a>
-                        <a href="/" class="header_signup">Регистрация</a>
-                    </div>
-
-                    <div class="header_user" style="display: none;">
-                        <a href="#" class="header_user_username">▼ Иванов И. И</a>
-                        <a href="#" class="header_user_logout"> - Выйти</a>
+                    <div id="headerUser" class="header_user">
+                        <a href="/account" id="headerUserUsername" class="header_user_username">▼ Иванов И. И</a>
+                        <a href="/logout" class="header_user_logout"> - Выйти</a>
                     </div>
                 </nav>
 
@@ -86,26 +81,58 @@
                             <p>▼ Заголовок и содержание</p>
                             <br>
                             <form method='POST' action="/updateDocumentDraft" id="updateDocument" class="general_wrapper">
+
                                 <div class="general_field">
-                                    <label for="number" class="general_label">Номер документа</label>
+                                    <label for="category" class="general_label">Категория документа:</label>
+                                    <select id="category">
+                                        <option value="Приказ">Приказ</option>
+                                        <option value="Служебная записка">Служебная записка</option>
+                                    </select>
+                                </div>
+
+                                <div class="general_field">
+                                    <label for="kind" class="general_label">Вид документа:</label>
+                                    <select id="kind">
+                                        <option value="На практику">На практику</option>
+                                        <option value="Утверждение тем ВКР">Утверждение тем ВКР</option>
+                                        <option value="Другой">Другой</option>
+                                      </select>
+                                </div><br><hr>
+
+                                <div class="general_field">
+                                    <label for="number" class="general_label">Номер документа:</label>
                                     <input type="text" id="number" class="general_text_input" placeholder="Введите номер документа" name="number" required>
                                 </div>
                                 <div class="general_field">
-                                    <label for="date" class="general_label">Дата</label>
+                                    <label for="date" class="general_label">Дата:</label>
                                     <input type="text" id="date" class="general_text_input" placeholder="Введите дату" name="date" value="1999-12-31" required>
                                 </div>
                                 <div class="general_field">
-                                    <label for="accessStamp" class="general_label">Гриф ограничения</label>
-                                    <input type="text" id="accessStamp" class="general_text_input" placeholder="Введите ограничения" name="accessStamp" required>
+                                    <label for="performer" class="general_label">Исполнитель:</label>
+                                    <input type="text" id="performer" class="general_text_input" placeholder="Введите исполнителя" name="performer" required>
                                 </div>
+                                <div class="general_field">
+                                    <label for="accessStamp" class="general_label">Статус:</label>
+                                    <!-- <input type="text" id="accessStamp" class="general_text_input" placeholder="Введите ограничения" name="accessStamp" required> -->
+                                    <select id="status">
+                                        <option value="Проект">Проект</option>
+                                        <option value="Не начато">Не начато</option>
+                                        <option value="Не обработан">Не обработано</option>
+                                        <option value="Не подписано">Не подписано</option>
+                                        <option value="Подписан">Подписан</option>
+                                        <option value="Издан">Издан</option>
+                                        <option value="Исполнен">Исполнен</option>
+                                      </select>
+                                </div>
+
                                 <br><hr>
                                 <div class="general_field">
-                                    <label for="head" class="general_label">Заголовок</label>
+                                    <label for="head" class="general_label">Заголовок:</label>
                                     <!-- <input type="text" id="head" class="general_text_input" placeholder="Введите номер документа" name="head" required> -->
                                     <textarea form="updateDocument" name="head" id="head" class="general_text_input area_input" rows="2" wrap="soft" placeholder="Введите заголовок" required></textarea>
                                 </div>
                                 <div class="general_field">
-                                    <label for="basis" class="general_label">Основание</label>
+                                    <label for="basis" class="general_label">Основание:</label>
                                     <textarea form="updateDocument" name="basis" id="basis" class="general_text_input area_input" rows="5" wrap="soft" placeholder="Введите основание издания приказа" required></textarea>
                                 </div>
                             </form>
@@ -122,19 +149,20 @@
                             <div class="clauses_wrapper">
                                 <div class="clauses_control">
                                     <div class="clauses_selection">
-                                        <!-- <button class="toolbar_button">Все приказы</button>
-                                        <button class="toolbar_button">Мои приказы</button> -->
+                                        <!-- <button class="toolbar_button">Все записи</button>
+                                        <button class="toolbar_button">Мои записи</button> -->
                                     </div>
                                     <div class="clauses_edit">
-                                        <button id="addClauseBtn">Создать пункт</button>
+                                        <button id="addClauseBtn">Создать</button>
                                     </div>
                                 </div>
                             </div>
                             <table id="clausesList">
                                 <thead>
-                                    <th style="width: 10%">№</th>
-                                    <th style="width: 80%">Пункт</th>
-                                    <th style="width: 10%">Завершение</th>
+                                    <th style="width: 5%">№</th>
+                                    <th style="width: 85%">Пункт</th>
+                                    <th style="width: 10%">Статус</th>
+                                    <!-- <th style="width: 10%">Завершение</th> -->
                                     <!-- <th style="width: 20%">Дата изменения</th> -->
                                 </thead>
                                 <tbody id="clausesListAll">
@@ -154,22 +182,51 @@
                             <div class="files_wrapper">
                                 <div class="files_control">
                                     <div class="files_selection">
-                                        <!-- <button class="toolbar_button">Все приказы</button>
-                                        <button class="toolbar_button">Мои приказы</button> -->
+                                        <!-- <button class="toolbar_button">Все записи</button>
+                                        <button class="toolbar_button">Мои записи</button> -->
                                     </div>
                                     <div class="files_edit">
-                                        <button id="addFileBtn">Добавить файл</button>
+                                        <button id="addFileBtn">Добавить</button>
                                     </div>
                                 </div>
                             </div>
                             <table id="filesList">
                                 <thead>
-                                    <!-- <th style="width: 10%">Автор</th>
-                                    <th style="width: 70%">Заголовок</th>
-                                    <th style="width: 20%">Дата загрузки</th> -->
                                     <th style="width: 100%">Название</th>
                                 </thead>
                                 <tbody id="filesListAll">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approvers -->
+                <div class="approvers">
+                    <div class="container">
+                        <div class="generic_inner">
+                            <p>▼ Согласующие</p>
+                            <br>
+                            <div class="approvers_wrapper">
+                                <div class="approvers_control">
+                                    <div class="approvers_selection">
+                                        <!-- <button class="toolbar_button">Все записи</button>
+                                        <button class="toolbar_button">Мои записи</button> -->
+                                    </div>
+                                    <div class="approvers_edit">
+                                        <button id="addApproverBtn">Добавить</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="approversList">
+                                <thead>
+                                    <th style="width: 10%">№</th>
+                                    <th style="width: 35%">ФИО</th>
+                                    <th style="width: 40%">Должность</th>
+                                    <th style="width: 15%">Статус</th>
+                                </thead>
+                                <tbody id="approverListsAll">
 
                                 </tbody>
                             </table>
@@ -186,19 +243,19 @@
                             <div class="owners_wrapper">
                                 <div class="owners_control">
                                     <div class="owners_selection">
-                                        <!-- <button class="toolbar_button">Все приказы</button>
-                                        <button class="toolbar_button">Мои приказы</button> -->
+                                        <!-- <button class="toolbar_button">Все записи</button>
+                                        <button class="toolbar_button">Мои записи</button> -->
                                     </div>
                                     <div class="owners_edit">
-                                        <button id="addOwnerBtn">Добавить владельца</button>
+                                        <button id="addOwnerBtn">Добавить</button>
                                     </div>
                                 </div>
                             </div>
                             <table id="ownersList">
                                 <thead>
                                     <th style="width: 25%">ФИО</th>
-                                    <th style="width: 20%">E-mail</th>
-                                    <th style="width: 55%">Должность</th>
+                                    <th style="width: 30%">E-mail</th>
+                                    <th style="width: 45%">Должность</th>
                                 </thead>
                                 <tbody id="ownerListsAll">
 
@@ -233,7 +290,15 @@
                         <input type="text" id="performers" class="popup_text_input" placeholder="Введите исполнителей через запятую" name="performers">
                     </div>
 
-                    <div class="popup_addclause_expirationdate">
+                    <div class="popup_addclause_status">
+                        <label for="clause_status" class="popup_label"><b>Статус</b><br></label>
+                        <select id="clause_status" style="margin: 5px 0 0 0;">
+                            <option value="Исполнение">Исполнение</option>
+                            <option value="Завершено">Завершено</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div hidden class="popup_addclause_expirationdate">
                         <label for="expirationdate" class="popup_label"><b>Срок исполнения</b><br></label>
                         <input type="text" id="expirationdate" class="popup_text_input" placeholder="Введите срок окончания" name="expirationdate" value="1999-12-31">
                     </div>
@@ -252,10 +317,10 @@
         <div class="popup_addfile_inner">
             <span class="popup_btn_close" title="Close">&times;</span>
             <div class="popup_addfile_wrapper">
-                <h2>Добавить файл</h2><br>
+                <h2>Добавить файл</h2><br><hr><br>
 
                 <div class="popup_addfile_controls" style="display: flex;justify-content: space-between;">
-                    <form id="uploadForm" action="http://localhost:3001/upload" method="POST" enctype="multipart/form-data">
+                    <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
                         <input type="file" name="document_order">
                     </form>
     
@@ -265,6 +330,49 @@
                     <div class="input-label">Выбрать файл</div>
                 </label>
                 <input type="file" id="file-input"> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Approver Window -->
+    <div id="mAddApproverPopup" class="popup_addapprover">
+        <div class="popup_addapprover_inner">
+            <span class="popup_btn_close" title="Close">&times;</span>
+            <div class="popup_addapprover_wrapper">
+
+                <form class="popup_wrapper" id="newApproverForm" action="#">
+                    <h1>Согласующий</h1>
+                    <p>Введите необходимые данные</p>
+                    <hr>
+
+                    <div class="popup_addapprover_performers">
+                        <label for="approver_fullname" class="popup_label"><b>ФИО согласующего</b><br></label>
+                        <input type="text" id="approver_fullname" class="popup_text_input" placeholder="Введите ФИО согласующего" name="Fullname">
+                    </div>
+    
+                    <div class="popup_addapprover_performers">
+                        <label for="approver_position" class="popup_label"><b>Должность</b><br></label>
+                        <input type="text" id="approver_position" class="popup_text_input" placeholder="Введите должность согласующего" name="Position">
+                    </div>
+
+                    <div class="popup_addapprover_status">
+                        <label for="approver_status" class="popup_label"><b>Статус</b><br></label>
+                        <select id="approver_status" style="margin: 5px 0 0 0;">
+                            <option value="Не согласовано">Не согласовано</option>
+                            <option value="Согласовано">Согласовано</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="popup_addapprover_expirationdate">
+                        <label for="approver_date" class="popup_label"><b>Дата согласования</b><br></label>
+                        <input type="text" id="approver_date" class="popup_text_input" placeholder="Введите дату согласования" name="ApproveDate">
+                    </div>
+    
+                    <div class="popup_btn_confirmation">
+                        <button type="button" class="popup_btn_cancel">Отмена</button>
+                        <button type="button" id="finishApproverBtn" class="popup_btn_submit">Добавить</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

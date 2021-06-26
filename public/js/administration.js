@@ -1,8 +1,10 @@
 // load the table when the page was loaded
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:3001/getTable/User')
+    fetch('/getTable/User')
     .then(response => response.json())
     .then(data => loadUsersTable(data['data']));
+
+    loadUserName();
 });
 
 // set the elements in the table clickable
@@ -32,7 +34,7 @@ function insertRowIntoUsersTable(data) {
         }
     }
 
-    tableHTML += `<td><button class="edit_row_btn" data-id=${data.UserID}>Ред.</td>`;
+    tableHTML += `<td><button class="edit_row_btn" data-id=${data.UserID}>Откр.</td>`;
     tableHTML += `<td><button class="delete_row_btn" data-id=${data.UserID}>&times;</td>`;
     tableHTML += "</tr>";
     
@@ -69,7 +71,7 @@ function loadUsersTable(data) {
         tableHTML += `<td>${Phone}</td>`;
         tableHTML += `<td>${Access}</td>`;
         tableHTML += `<td>${RegistrationDate.slice(0, 10)}</td>`;
-        tableHTML += `<td><button class="edit_row_btn" data-id=${UserID}>Ред.</td>`;
+        tableHTML += `<td><button class="edit_row_btn" data-id=${UserID}>Откр.</td>`;
         tableHTML += `<td><button class="delete_row_btn" data-id=${UserID}>&times;</td>`;
         tableHTML += "</tr>";
     });
@@ -78,7 +80,7 @@ function loadUsersTable(data) {
 }
 
 function deleteRowById(table, id) {
-    fetch('http://localhost:3001/delete/' + id, {
+    fetch('/delete/' + id, {
         headers: {
             'Content-type': 'application/json'
         },
@@ -93,4 +95,9 @@ function deleteRowById(table, id) {
             location.reload();
         }
     });
+}
+
+function loadUserName() {
+    const headerUsername = document.querySelector('#headerUserUsername');
+    headerUsername.innerHTML = "▼ " + localStorage.getItem("sCurrentUsername");
 }

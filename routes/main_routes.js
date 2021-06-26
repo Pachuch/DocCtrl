@@ -4,7 +4,7 @@ const auth_controller = require('../controllers/auth_controller');
 const file_controller = require('../controllers/file_controller');
 const router = express.Router();
 
-const mw = require('../middleware/middleware');
+const mw = require('../middleware/common');
 
 // navigation
 router.get('/', mw.redirectLogin, main_controller.index);
@@ -19,11 +19,13 @@ router.get('/report_view', main_controller.report_view);
 // authentication
 router.get('/login', mw.redirectHome, auth_controller.logging);
 router.get('/signup', mw.redirectHome, auth_controller.signingup);
+router.get('/logout', auth_controller.logout);
 router.post('/login', mw.redirectHome, auth_controller.login);
 router.post('/signup', mw.redirectHome, auth_controller.signup);
-// router.get('/me', auth_controller, controllers.getMe);
+// router.get('/account', auth_controller, controllers.getMe);
 
 // file streams
+router.get('/download/:path', file_controller.download);
 router.post('/upload', mw.upload_mw.single('document_order'), file_controller.upload);
 router.delete('/deleteRecordFile', file_controller.delete_record_file);
 

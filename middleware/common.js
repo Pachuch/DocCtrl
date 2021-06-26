@@ -15,13 +15,13 @@ const storage = multer.diskStorage({
 const upload_mw = multer({ storage });
 
 const redirectHome = (request, response, next) => {
-  if (request.session.user) {
+  if (request.session.userData) {
     response.redirect('/');
   } else { next(); }
 }
 
 const redirectLogin = (request, response, next) => {
-  if(!request.session.user) {
+  if(!request.session.userData) {
     response.redirect('/login');
   } else { next(); }
 };

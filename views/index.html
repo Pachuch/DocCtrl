@@ -27,7 +27,7 @@
             <div class="header_inner">
                 <div class="header_info">
                     <a href="/" class="header_logo"><img src="res/images/main/rainbow.png" alt="Logo" width="80%" height="auto"></a>
-                    <a href="account">Система учета исполнения приказов кафедры ИС УГЛТУ</a>
+                    <a href="#">Система учета исполнения приказов кафедры ИС УГЛТУ</a>
                 </div>
                 <!-- <div class="header_extern">
                     Links
@@ -39,14 +39,14 @@
                         <input type="submit" value="Поиск">
                     </form>
                     
-                    <div class="header_auth">
+                    <div id="headerAuth" class="header_auth">
                         <a href="/login" class="header_login">Войти</a>
                         <a href="/signup" class="header_signup">Регистрация</a>
                     </div>
 
-                    <div class="header_user" style="display: none;">
-                        <a href="#" class="header_user_username">▼ Иванов И. И</a>
-                        <a href="#" class="header_user_logout"> - Выйти</a>
+                    <div hidden id="headerUser" class="header_user">
+                        <a href="/account" id="headerUserUsername" class="header_user_username">▼ Иванов И. И</a>
+                        <a href="/logout" class="header_user_logout"> - Выйти</a>
                     </div>
                 </nav>
 
@@ -96,14 +96,14 @@
                 <div class="doclist">
                     <div class="container">
                         <div class="doclist_inner">
-                            <p>▼ Все приказы</p>
+                            <p>▼ Все записи</p>
                             <br>
                             <div class="doclist_wrapper">
 
                                 <div class="doclist_control">
                                     <div class="doclist_selection">
-                                        <button class="toolbar_button">Все приказы</button>
-                                        <button class="toolbar_button">Мои приказы</button>
+                                        <button class="toolbar_button">Все записи</button>
+                                        <button class="toolbar_button">Мои записи</button>
                                     </div>
                                     <div class="doclist_edit">
                                         <form>
@@ -115,10 +115,11 @@
                                 
                                 <table id="table_records">
                                     <thead>
-                                        <th style="width: 15%">Автор</th>
-                                        <th style="width: 60%">Заголовок</th>
-                                        <th style="width: 10%">Осталось</th>
-                                        <th style="width: 20%">Дата изменения</th>
+                                        <th style="width: 15%">Исполнитель</th>
+                                        <th style="width: 50%">Заголовок</th>
+                                        <th style="width: 10%">Статус</th>
+                                        <th style="width: 15%">Номер</th>
+                                        <th style="width: 10%">Дата</th>
                                     </thead>
                                     <tbody id="doclist_all">
 
@@ -142,8 +143,8 @@
 
                                 <div class="doclist_control">
                                     <div class="doclist_selection">
-                                        <!-- <button class="toolbar_button">Все приказы</button>
-                                        <button class="toolbar_button">Мои приказы</button> -->
+                                        <!-- <button class="toolbar_button">Все записи</button>
+                                        <button class="toolbar_button">Мои записи</button> -->
                                     </div>
                                     <div class="doclist_edit">
                                         <form>
@@ -167,16 +168,6 @@
                         </div>
                     </div>
                 </div>
-        
-                <div class="analysis">
-                    <div class="container">
-                        <div class="analysis_inner">
-                            <p>▼ Прочее</p>
-                            <br>
-                            <p><a href="/administration">● Администрирование</a></p>
-                        </div>
-                    </div>
-                </div>
 
             </section>
 
@@ -187,24 +178,51 @@
                         <div class="generic_inner">
                             <p>▼ Фильтр</p>
                             <form method='POST' action="#" class="filter_wrapper">
-                                <div class="generic_field">
-                                    <label for="filter_start_date" class="generic_label">Дата начала</label>
-                                    <input type="text" id="filter_start_date" class="medium_text_input" placeholder="Введите дату начала" name="filter_start_date" value="2021-05-31">
-                                </div>
-
-                                <div class="generic_field">
-                                    <label for="filter_end_date" class="generic_label">Дата завершения</label>
-                                    <input type="text" id="filter_end_date" class="medium_text_input" placeholder="Введите дату окончания" name="filter_end_date" value="2021-06-31">
-                                </div>
-                                <br>
-
                                 <div class="generic_field" style="display: flex; justify-content: space-between;">
                                     <div>
                                         <input type="checkbox" id="filter_is_actual" name="filter_is_actual" style="margin-bottom:15px" checked> Действующие
-                                        <input type="checkbox" id="filter_is_outdated" name="filter_is_outdated" style="margin-bottom:15px" checked> Просроченные
-                                        <input type="checkbox" id="filter_is_validated" name="filter_is_validated" style="margin-bottom:15px"> Завершенные
+                                        <input type="checkbox" id="filter_is_outdated" name="filter_is_outdated" style="margin-bottom:15px"> Просроченные
                                     </div>
                                     <button type="button" id="filter_btn">Показать</button>
+                                </div><hr>
+
+                                <div class="generic_field">
+                                    <label for="criteria" class="generic_label">Категория:</label>
+                                    <select id="category">
+                                        <option value="Приказ">Приказ</option>
+                                        <option value="Служебная записка">Служебная записка</option>
+                                    </select>
+                                </div>
+
+                                <div class="generic_field">
+                                    <label for="criteria" class="generic_label">Вид документа:</label>
+                                    <select id="kind">
+                                        <option value="На практику">На практику</option>
+                                        <option value="Утверждение тем ВКР">Утверждение тем ВКР</option>
+                                        <option value="Другой">Другой</option>
+                                    </select>
+                                </div>
+
+                                <div class="generic_field">
+                                    <label for="criteria" class="generic_label">Статус:</label>
+                                    <select id="status">
+                                        <option value="Проект">Проект</option>
+                                        <option value="Не начато">Не начато</option>
+                                        <option value="Не обработан">Не обработано</option>
+                                        <option value="Не подписано">Не подписано</option>
+                                        <option value="Подписан">Подписан</option>
+                                        <option value="Издан">Издан</option>
+                                        <option value="Исполнен">Исполнен</option>
+                                    </select>
+                                </div><br><hr>
+                                <div class="generic_field">
+                                    <label for="filter_start_date" class="generic_label">Диапазон: начало</label>
+                                    <input type="text" id="filter_start_date" class="medium_text_input" placeholder="Введите дату начала" name="filter_start_date" value="2020-01-31">
+                                </div>
+
+                                <div class="generic_field">
+                                    <label for="filter_end_date" class="generic_label">Диапазон: конец</label>
+                                    <input type="text" id="filter_end_date" class="medium_text_input" placeholder="Введите дату окончания" name="filter_end_date" value="2030-01-31">
                                 </div>
                             </form>
                         </div>
@@ -220,8 +238,8 @@
 
                                 <div class="doclist_control">
                                     <div class="doclist_selection">
-                                        <button class="toolbar_button">Все приказы</button>
-                                        <button class="toolbar_button">Мои приказы</button>
+                                        <button class="toolbar_button">Все записи</button>
+                                        <button class="toolbar_button">Мои записи</button>
                                     </div>
                                     <div class="doclist_edit">
                                         <button id="generate_report_btn" class="toolbar_button">Сформировать отчет</button>
@@ -230,10 +248,11 @@
                                 
                                 <table id="table_filtered_records">
                                     <thead>
-                                        <th style="width: 15%">Автор</th>
-                                        <th style="width: 60%">Заголовок</th>
-                                        <th style="width: 10%">Осталось</th>
-                                        <th style="width: 20%">Дата изменения</th>
+                                        <th style="width: 15%">Исполнитель</th>
+                                        <th style="width: 50%">Заголовок</th>
+                                        <th style="width: 10%">Статус</th>
+                                        <th style="width: 15%">Номер</th>
+                                        <th style="width: 10%">Дата</th>
                                     </thead>
                                     <tbody id="doclist_filtered_all">
 
@@ -261,6 +280,16 @@
                     <div class="container">
                         <div class="generic_inner">
                             <p>▼ Контактные данные</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis">
+                    <div class="container">
+                        <div class="analysis_inner">
+                            <p>▼ Прочее</p>
+                            <br>
+                            <p><a href="/administration">● Администрирование</a></p>
                         </div>
                     </div>
                 </div>

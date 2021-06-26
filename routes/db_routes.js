@@ -8,6 +8,7 @@ router.get('/getFiltered', db_controller.get_filtered);
 router.get('/getUser', db_controller.get_user);
 router.get('/getRecordClauses', db_controller.get_record_clauses);
 router.get('/getRecordFiles', db_controller.get_record_files);
+router.get('/getRecordApprovers', db_controller.get_record_approvers);
 router.get('/getRecordOwners', db_controller.get_record_owners);
 router.get('/insertDocumentDraft', db_controller.insert_document_draft);
 

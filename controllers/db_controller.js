@@ -61,6 +61,17 @@ const get_record_files = (request, response) => {
     .catch(err => console.log(err));
 }
 
+const get_record_approvers = (request, response) => {
+
+    const db = dbService.getDbServiceInstance();
+ 
+    const results = db.getRecordApprovers(request.query.RecordId);
+  
+    results
+    .then(data => response.json({data : data}))
+    .catch(err => console.log(err));
+}
+
 const get_record_owners = (request, response) => {
     const db = dbService.getDbServiceInstance();
  
@@ -74,9 +85,8 @@ const get_record_owners = (request, response) => {
 const insert_document_draft = (request, response) => {
     const db = dbService.getDbServiceInstance();
 
-    request.body.Validation = 0;
     request.body.ChangeDate = new Date();
-    request.body.Status = "draft";
+    request.body.Status = "Проект";
     const results = db.insert('Record', request.body);
   
     results
@@ -148,6 +158,7 @@ module.exports = {
     get_user,
     get_record_clauses,
     get_record_files,
+    get_record_approvers,
     get_record_owners,
     insert_document_draft,
     insert,

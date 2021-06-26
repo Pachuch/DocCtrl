@@ -54,6 +54,7 @@
 
 .clauses_control,
 .files_control,
+.approvers_control,
 .owners_control {
     display: flex;
     justify-content: space-between;
@@ -66,6 +67,7 @@
 
 .popup_addclause,
 .popup_addfile,
+.popup_addapprover,
 .popup_addowner {
     display: none;
     position: fixed;
@@ -82,6 +84,7 @@
 
 .popup_addclause_inner,
 .popup_addfile_inner,
+.popup_addapprover_inner,
 .popup_addowner_inner {
     background-color: #fefefe;
     margin: auto;
@@ -92,6 +95,7 @@
 
 .popup_addclause_wrapper,
 .popup_addfile_wrapper,
+.popup_addapprover_wrapper,
 .popup_addowner_wrapper {
     margin: 5px;
     padding: 15px;

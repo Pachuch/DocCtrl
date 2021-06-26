@@ -4,16 +4,18 @@ dotenv.config();
 
 let instance = null;
 
-const connection = mysql.createPool({
+const config = {
     host: process.env.HOST,
     user: process.env.USER,
     database: process.env.DATABASE,
     password: process.env.PASSWORD,
     port: process.env.DB_PORT,
     connectionLimit: process.env.DB_LIMIT
-});
+}
 
-connection.query("SET FOREIGN_KEY_CHECKS=0"); // TODO: disabled key checks
+const connection = mysql.createPool(config);
+// TODO: disabled key checks
+connection.query("SET FOREIGN_KEY_CHECKS=0");
 
 // TODO: add check if connection was created successfully
 
@@ -91,15 +93,26 @@ class dbService {
         try {
             const response = await new Promise((resolve, reject) =>
             {
-                // const query = `SELECT * FROM ${table} WHERE Validation = ${body.validated} AND DATE(DocumentDate) BETWEEN ${body.start} AND ${body.end}`;
-
                 let query = ``;
                 query += `SELECT *\n`;
                 query += `FROM ${table}\n`;
-                // query += `WHERE Validation = ${body.validated} AND\n`;
-                query += `WHERE DATE(EndDate) BETWEEN\n`;
-                query += `'${body.start}' AND\n`;
-                query += `'${body.end}'`;
+                query += `WHERE `;
+
+                if (body.start && body.end) {
+                    query += `DATE(DocumentDate) BETWEEN\n`;
+                    query += `'${body.start}' AND\n`;
+                    query += `'${body.end}' AND\n`;
+                }
+
+                if (body.isoutdated === "true") {
+                    query += `DATE(EndDate) NOT BETWEEN\n`;
+                    query += `'1970-12-31' AND\n`;
+                    query += `'${new Date().toJSON().slice(0, 10)}' AND\n`;
+                }
+
+                query += `Category = '${body.category}' AND\n`;
+                query += `Kind = '${body.kind}' AND\n`;
+                query += `Status = '${body.status}'`;
 
                 connection.query(query, (err, results) => 
                 {
@@ -143,7 +156,6 @@ class dbService {
             body = await new Promise((resolve, reject) =>
             {
                 const query = `INSERT INTO ${table} (${Object.keys(body)}) VALUES (${spreadQuestionmarks(Object.keys(body).length)})`;
-
                 connection.query(query, Object.values(body), (err, result) => 
                 {
                     if(err) reject(new Error(err.message));
@@ -230,7 +242,6 @@ class dbService {
             const response = await new Promise((resolve, reject) =>
             {
                 const query = `DELETE FROM ${table} WHERE ${parent} = ${parentValue} AND ${child} = ${childValue}`;
-    
                 connection.query(query, (err, result) => 
                 {
                     if(err) reject(new Error(err.message));
@@ -250,7 +261,7 @@ class dbService {
         try {
             const response = await new Promise((resolve, reject) =>
             {
-                const query = `SELECT ClauseID, Number, Body, Performers, ExpirationDate, ReportID FROM Clause WHERE ClauseID IN (SELECT ClauseID FROM RecordClause WHERE RecordID = ${RecordId})`
+                const query = `SELECT ClauseID, Number, Body, Performers, Status, ExpirationDate, ReportID FROM Clause WHERE ClauseID IN (SELECT ClauseID FROM RecordClause WHERE RecordID = ${RecordId})`
 
                 connection.query(query, (err, results) => 
                 {
@@ -272,6 +283,26 @@ class dbService {
             const response = await new Promise((resolve, reject) =>
             {
                 const query = `SELECT FileID, Name, Path, Type FROM File WHERE FileID IN (SELECT FileID FROM RecordFile WHERE RecordID = ${RecordId})`
+
+                connection.query(query, (err, results) => 
+                {
+                    if(err) {
+                        reject(new Error(err.message));
+                    }
+                    resolve(results);
+                });
+            });
+            return response;
+
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    async getRecordApprovers(RecordId) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = `SELECT ApproverID, Number, Fullname, Position, Status, ApproveDate FROM Approver WHERE ApproverID IN (SELECT ApproverID FROM RecordApprover WHERE RecordID = ${RecordId})`
 
                 connection.query(query, (err, results) => 
                 {
