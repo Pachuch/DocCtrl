@@ -85,6 +85,8 @@ const get_record_owners = (request, response) => {
 const insert_document_draft = (request, response) => {
     const db = dbService.getDbServiceInstance();
 
+    request.body.Category = "Приказ";
+    request.body.Kind = "На практику";
     request.body.ChangeDate = new Date();
     request.body.Status = "Проект";
     const results = db.insert('Record', request.body);

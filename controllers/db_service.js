@@ -17,6 +17,7 @@ const connection = mysql.createPool(config);
 // TODO: disabled key checks
 connection.query("SET FOREIGN_KEY_CHECKS=0");
 
+
 // TODO: add check if connection was created successfully
 
 function spreadQuestionmarks(count) {
@@ -158,7 +159,7 @@ class dbService {
                 const query = `INSERT INTO ${table} (${Object.keys(body)}) VALUES (${spreadQuestionmarks(Object.keys(body).length)})`;
                 connection.query(query, Object.values(body), (err, result) => 
                 {
-                    if(err) reject(new Error(err.message));
+                    if (err) reject(new Error(err.message));
                     resolve(Object.assign({insertId : result.insertId}, body));
                 });
             });

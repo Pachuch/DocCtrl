@@ -191,6 +191,6 @@
     document.querySelector('#fullname').value = localStorage.getItem("sCurrentUserFullName");
     document.querySelector('#position').value = localStorage.getItem("sCurrentUserPosition");
     document.querySelector('#phone').value = localStorage.getItem("sCurrentUserPhone");
-    document.querySelector('#registration_date').innerHTML = localStorage.getItem("sCurrentUserRegDate");
+    document.querySelector('#registration_date').innerHTML = localStorage.getItem("sCurrentUserRegDate").slice(0, 10);
 </script>
 </html>

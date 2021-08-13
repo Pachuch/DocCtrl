@@ -55,13 +55,9 @@ input[type="button"] {
     display: inline-block;
     vertical-align: top;
     height: 1.7em;
-    /* margin-top: 50px; */
-    /* padding: 15px; */
     border: 1px solid #888888;
     border-radius: 5px;
     text-decoration: none;
-    /* color: #fb6d3e; */
-    /* background: rgba(255, 255, 255, 0); */
     font-weight: 600;
     transition: 0.5s;
     border: opacity 1px;

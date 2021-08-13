@@ -24,7 +24,7 @@ const login = (request, response) => {
     results
     .then(data => {
 		const user = data.find(user => user.Email === request.body.Email && user.Password === request.body.Password);
-
+		
 		if (user) {
 			const userString = JSON.stringify({
 				UserID: user.UserID,
@@ -32,7 +32,8 @@ const login = (request, response) => {
 				Email: user.Email,
 				Fullname: user.Fullname,
 				Position: user.Position,
-				Phone: user.Phone
+				Phone: user.Phone,
+				RegistrationDate: user.RegistrationDate
 			});
 
 			request.session.userData = userString;
